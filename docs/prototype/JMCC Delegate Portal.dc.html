@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#eae4da; font-family:'Montserrat',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#680009; text-decoration:none; }
+  a:hover { color:#8a0710; text-decoration:underline; }
+  button { font-family:'Montserrat',sans-serif; cursor:pointer; border:0; background:none; }
+  input, textarea { font-family:'Montserrat',sans-serif; }
+  ::-webkit-scrollbar { width:0; height:0; }
+  @keyframes sealBreak { 0% { transform:translateY(0) scaleY(1); opacity:1 } 60% { transform:translateY(-8px) scaleY(.96); opacity:.5 } 100% { transform:translateY(-26px) scaleY(.9); opacity:0 } }
+  @keyframes riseIn { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:translateY(0) } }
+  @keyframes sweep { from { transform:translateX(-110%) } to { transform:translateX(110%) } }
+  @keyframes glowPulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+  @keyframes sheetUp { from { transform:translateY(100%) } to { transform:translateY(0) } }
+  @media (prefers-reduced-motion: reduce) {
+    [data-anim] { animation:none !important; opacity:1 !important; transform:none !important; }
+    [data-anim="seal"] { animation:none !important; opacity:0 !important; }
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; align-items:flex-start; justify-content:center; flex-wrap:wrap; gap:28px; padding:36px 24px 60px; background:radial-gradient(120% 90% at 50% 0%, #f3ede3 0%, #e5ded2 100%);">
+
+  <div style="display:flex; flex-direction:column; gap:14px; align-items:center; flex:1 1 360px; min-width:0; max-width:{{ colMax }};">
+    <div style="display:flex; align-items:center; gap:10px; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#5e5c5a; font-weight:600;">
+      <span style="width:8px; height:8px; background:#680009; transform:rotate(45deg); display:inline-block;"></span>
+      {{ shellCaption }}
+    </div>
+
+    <div style="width:{{ frameW }}; height:{{ frameH }}; background:#141010; border-radius:{{ frameRadius }}; padding:{{ framePad }}; box-shadow:0 40px 90px rgba(40,20,14,.34), 0 2px 0 rgba(255,255,255,.5) inset; position:relative;">
+      <div style="width:100%; height:100%; border-radius:{{ innerRadius }}; overflow:hidden; background:#f7f3ec; display:flex; flex-direction:row; position:relative;">
+
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ false }}">
+          <div style="width:236px; flex:none; background:#680009; display:flex; flex-direction:column; padding:18px 12px 16px; gap:4px; border-right:1px solid rgba(250,187,32,.18);">
+            <div style="display:flex; align-items:center; gap:10px; padding:0 6px 16px;">
+              <span style="width:40px; height:40px; border-radius:9px; background:#f7f3ec; display:grid; place-items:center; flex:none;">
+                <img src="uploads/JMCC%20LOGO.png" alt="JMCC" style="width:32px; height:32px; object-fit:contain; display:block;" />
+              </span>
+              <span style="min-width:0;">
+                <span style="display:block; font-family:'Unbounded',sans-serif; font-weight:700; font-size:13px; color:#f7f3ec;">JMCC</span>
+                <span style="display:block; font-size:9.5px; letter-spacing:.14em; color:#d8af74; font-weight:700; margin-top:2px;">DELEGATE PORTAL</span>
+              </span>
+            </div>
+            <sc-for list="{{ sidebarItems }}" as="si" hint-placeholder-count="8">
+              <button onClick="{{ si.onGo }}" style="min-height:44px; border-radius:9px; padding:0 12px; display:flex; align-items:center; gap:10px; text-align:left; background:{{ si.bg }};">
+                <span style="width:14px; height:14px; border-radius:{{ si.iconRadius }}; border:2px solid {{ si.color }}; background:{{ si.iconFill }}; flex:none;"></span>
+                <span style="font-size:12.5px; font-weight:600; color:{{ si.color }};">{{ si.label }}</span>
+                <sc-if value="{{ si.badge }}" hint-placeholder-val="{{ false }}">
+                  <span style="margin-left:auto; min-width:20px; height:18px; border-radius:9px; background:#fabb20; color:#3d0005; font-size:10px; font-weight:700; display:grid; place-items:center; padding:0 6px;">{{ si.count }}</span>
+                </sc-if>
+              </button>
+            </sc-for>
+            <div style="margin-top:auto; padding:12px 8px 0; border-top:1px solid rgba(247,243,236,.14); font-size:10.5px; color:rgba(247,243,236,.55); line-height:1.5;">{{ userName }}<br />JMCC 2026–2027</div>
+          </div>
+        </sc-if>
+
+        <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+
+        <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#680009; color:#f7f3ec; padding:14px 26px 6px; display:flex; align-items:center; justify-content:space-between; font-size:12px; font-weight:600; letter-spacing:.02em; flex:none;">
+            <span>7:40</span>
+            <span style="display:flex; align-items:center; gap:6px;">
+              <span style="opacity:.9;">{{ netGlyph }}</span>
+              <span style="width:22px; height:11px; border:1.5px solid rgba(247,243,236,.75); border-radius:3px; display:inline-block; position:relative;">
+                <span style="position:absolute; inset:1.5px; right:60%; background:#f7f3ec; border-radius:1px; display:block;"></span>
+              </span>
+              <span style="font-size:10px; opacity:.8;">12%</span>
+            </span>
+          </div>
+        </sc-if>
+
+        <div style="background:#680009; color:#f7f3ec; padding:6px 16px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; flex:none;">
+          <div style="display:flex; align-items:center; gap:9px; min-width:0;">
+            <span style="width:34px; height:34px; border-radius:8px; background:#f7f3ec; display:grid; place-items:center; flex:none;">
+              <img src="uploads/JMCC%20LOGO.png" alt="JMCC" style="width:27px; height:27px; object-fit:contain; display:block;" />
+            </span>
+            <span style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; letter-spacing:.02em;">JMCC</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <button onClick="{{ noop }}" style="width:44px; height:44px; display:grid; place-items:center; position:relative;" aria-label="Notifications">
+              <svg width="17" height="17" viewBox="0 0 20 20"><path d="M4 15h12l-1.6-2.4V9a4.4 4.4 0 0 0-8.8 0v3.6Z" fill="none" stroke="#f7f3ec" stroke-width="1.6"></path><circle cx="10" cy="17.4" r="1.4" fill="#f7f3ec"></circle></svg>
+              <span style="position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:#fabb20;"></span>
+            </button>
+            <button onClick="{{ cycleRole }}" style="height:32px; padding:0 10px; border-radius:16px; background:rgba(247,243,236,.12); border:1px dashed rgba(250,187,32,.6); display:flex; align-items:center; gap:6px;">
+              <span style="font-size:8px; letter-spacing:.14em; color:#fabb20; font-weight:700;">DEV</span>
+              <span style="font-size:11px; color:#f7f3ec; font-weight:600;">{{ roleLabel }}</span>
+            </button>
+          </div>
+        </div>
+
+        <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#2b1416; color:#f7f3ec; padding:9px 16px; display:flex; gap:9px; align-items:flex-start; border-bottom:1px solid rgba(250,187,32,.3); flex:none;">
+            <span style="width:8px; height:8px; border-radius:50%; background:#fabb20; margin-top:4px; flex:none; animation:glowPulse 2s infinite;"></span>
+            <span style="font-size:11.5px; line-height:1.45;">Offline. Your case materials and schedule are available; submission and signing need a connection.</span>
+          </div>
+        </sc-if>
+
+        <div style="flex:1; overflow-y:auto; overscroll-behavior:contain; background:#f7f3ec; width:100%; max-width:{{ contentMaxW }}; margin:0 auto;">
+
+          <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:20px 18px 28px; display:flex; flex-direction:column; gap:18px;">
+
+              <sc-if value="{{ isDelegate }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:18px;">
+                  <div>
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:22px; color:#680009; line-height:1.15; letter-spacing:-.01em;">{{ greeting }}</div>
+                    <div style="font-size:12px; color:#5e5c5a; margin-top:6px; font-weight:500;">JDCC · Marketing</div>
+                  </div>
+
+                  <div style="background:#680009; border-radius:14px; padding:16px 16px 15px; color:#f7f3ec;">
+                    <div style="font-size:9.5px; letter-spacing:.18em; color:#d8af74; font-weight:700;">{{ t.next }}</div>
+                    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-top:9px;">
+                      <div>
+                        <div style="font-size:13.5px; font-weight:600;">Case release</div>
+                        <div style="font-size:11px; color:rgba(247,243,236,.62); margin-top:3px;">Sat 8:00 AM · EDT (America/Montreal)</div>
+                      </div>
+                      <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#fabb20; letter-spacing:-.02em; white-space:nowrap;">{{ cd.d }}d {{ cd.h }}:{{ cd.m }}:{{ cd.s }}</div>
+                    </div>
+                    <button onClick="{{ goCases }}" style="margin-top:14px; height:44px; width:100%; border-radius:10px; background:rgba(250,187,32,.14); border:1px solid rgba(250,187,32,.45); color:#fabb20; font-size:12.5px; font-weight:600;">Open the vault</button>
+                  </div>
+
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.18em; color:#5e5c5a; font-weight:700; margin-bottom:9px;">{{ t.needs }} (2)</div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 12px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <div style="min-width:0;">
+                          <div style="font-size:13px; font-weight:600; color:#241a18;">Media &amp; photo release</div>
+                          <div style="font-size:11px; color:#5e5c5a; margin-top:2px;">Due Thu, Nov 6</div>
+                        </div>
+                        <button onClick="{{ goDocs }}" style="height:36px; padding:0 16px; border-radius:8px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Sign</button>
+                      </div>
+                      <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 12px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <div style="min-width:0;">
+                          <div style="font-size:13px; font-weight:600; color:#241a18;">{{ t.dietary }}</div>
+                          <div style="font-size:11px; color:#5e5c5a; margin-top:2px;">Due Fri, Nov 7</div>
+                        </div>
+                        <button onClick="{{ openDietary }}" style="height:36px; padding:0 16px; border-radius:8px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">{{ t.open }}</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.18em; color:#5e5c5a; font-weight:700; margin-bottom:9px;">{{ t.today }}</div>
+                    <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; overflow:hidden;">
+                      <button onClick="{{ openEventPractice }}" style="width:100%; text-align:left; padding:13px 14px; display:flex; gap:12px; align-items:center; border-bottom:1px solid rgba(94,92,90,.13);">
+                        <span style="font-family:'Unbounded',sans-serif; font-weight:600; font-size:12px; color:#680009; width:44px;">09:00</span>
+                        <span style="width:7px; height:7px; background:#680009; display:inline-block;"></span>
+                        <span style="font-size:12.5px; color:#241a18; font-weight:500;">Practice case — MB 3.210</span>
+                      </button>
+                      <button onClick="{{ openEventSocial }}" style="width:100%; text-align:left; padding:13px 14px; display:flex; gap:12px; align-items:center;">
+                        <span style="font-family:'Unbounded',sans-serif; font-weight:600; font-size:12px; color:#680009; width:44px;">18:30</span>
+                        <span style="width:7px; height:7px; background:#5e5c5a; border-radius:50%; display:inline-block;"></span>
+                        <span style="font-size:12.5px; color:#241a18; font-weight:500;">Delegate social — Reggie's</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <sc-if value="{{ promo }}" hint-placeholder-val="{{ true }}">
+                    <div style="border-radius:14px; overflow:hidden; background:#680009; position:relative;">
+                      <button onClick="{{ dismissPromo }}" style="position:absolute; top:8px; right:8px; width:44px; height:44px; color:rgba(247,243,236,.6); font-size:15px;" aria-label="Dismiss">×</button>
+                      <div style="height:96px; background:repeating-linear-gradient(135deg, #4d0007 0 10px, #56000a 10px 20px); display:grid; place-items:center;">
+                        <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; letter-spacing:.14em; color:rgba(216,175,116,.75);">EVENT PHOTO</span>
+                      </div>
+                      <div style="padding:14px 16px 16px; color:#f7f3ec;">
+                        <div style="font-size:9.5px; letter-spacing:.16em; color:#d8af74; font-weight:700;">JMCC EVENT</div>
+                        <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; margin-top:7px;">JDCC — kickoff night</div>
+                        <div style="font-size:11.5px; color:rgba(247,243,236,.7); margin-top:6px; line-height:1.5;">Nov 14 · Meet the eleven discipline leads before the roster locks.</div>
+                        <button onClick="{{ noop }}" style="margin-top:13px; height:44px; padding:0 22px; border-radius:8px; background:#fabb20; color:#3d0005; font-size:12.5px; font-weight:700;">RSVP</button>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.18em; color:#5e5c5a; font-weight:700; margin-bottom:9px;">{{ t.recent }}</div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <button onClick="{{ goMessages }}" style="text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="font-size:12.5px; font-weight:700; color:#241a18;">#marketing</span>
+                        <span style="font-size:11px; font-weight:700; color:#f7f3ec; background:#680009; border-radius:10px; padding:3px 8px;">4 new</span>
+                      </button>
+                      <button onClick="{{ goFeedback }}" style="text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="font-size:12.5px; font-weight:600; color:#241a18;">Coach note from D. Lavoie</span>
+                        <span style="font-size:10.5px; font-weight:700; color:#680009; letter-spacing:.08em;">UNREAD</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isCoach }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                  <div>
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:21px; color:#680009;">Good morning, Dominique</div>
+                    <div style="font-size:12px; color:#5e5c5a; margin-top:6px; font-weight:500;">Coach · 3 teams · JDCC</div>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <sc-for list="{{ coachTeams }}" as="tm" hint-placeholder-count="3">
+                      <button onClick="{{ goFeedback }}" style="text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                          <span style="font-family:'Unbounded',sans-serif; font-weight:600; font-size:14px; color:#680009;">{{ tm.name }}</span>
+                          <sc-if value="{{ tm.unread }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:10px; font-weight:700; color:#f7f3ec; background:#680009; border-radius:10px; padding:3px 8px;">{{ tm.unreadLabel }}</span>
+                          </sc-if>
+                        </div>
+                        <div style="font-size:11.5px; color:#5e5c5a; margin-top:5px;">{{ tm.discipline }} · {{ tm.members }} delegates</div>
+                        <div style="font-size:11.5px; color:#241a18; margin-top:8px; font-weight:600;">Next: {{ tm.next }}</div>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isExecLike }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                  <div>
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:21px; color:#680009;">{{ execGreeting }}</div>
+                    <div style="font-size:12px; color:#5e5c5a; margin-top:6px; font-weight:500;">{{ execSub }}</div>
+                  </div>
+
+                  <sc-if value="{{ isSuper }}" hint-placeholder-val="{{ false }}">
+                    <div style="background:#2b1416; border-radius:12px; padding:12px 14px; display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;">
+                      <div><div style="font-size:9px; letter-spacing:.14em; color:#d8af74; font-weight:700;">ACTIVE USERS</div><div style="font-family:'Unbounded',sans-serif; font-size:15px; color:#fabb20; margin-top:3px;">118</div></div>
+                      <div><div style="font-size:9px; letter-spacing:.14em; color:#d8af74; font-weight:700;">DOCUSEAL SYNC</div><div style="font-size:12.5px; color:#f7f3ec; margin-top:5px; font-weight:600;">Healthy · 2 min ago</div></div>
+                      <div><div style="font-size:9px; letter-spacing:.14em; color:#d8af74; font-weight:700;">STORAGE</div><div style="font-size:12.5px; color:#f7f3ec; margin-top:5px; font-weight:600;">14.2 / 50 GB</div></div>
+                      <div><div style="font-size:9px; letter-spacing:.14em; color:#d8af74; font-weight:700;">ERRORS (24H)</div><div style="font-size:12.5px; color:#f7f3ec; margin-top:5px; font-weight:600;">0</div></div>
+                    </div>
+                  </sc-if>
+
+                  <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                      <span style="font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">SIGNATURES OUTSTANDING</span>
+                      <span style="font-family:'Unbounded',sans-serif; font-size:13px; color:#680009;">87 / 120</span>
+                    </div>
+                    <div style="height:6px; border-radius:3px; background:rgba(94,92,90,.16); margin-top:10px; overflow:hidden;">
+                      <div style="width:72.5%; height:100%; background:#680009;"></div>
+                    </div>
+                    <button onClick="{{ goDocs }}" style="margin-top:12px; height:44px; width:100%; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12.5px; font-weight:600;">Open tracker · send reminders</button>
+                  </div>
+
+                  <div style="background:#680009; border-radius:12px; padding:14px; color:#f7f3ec;">
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#d8af74; font-weight:700;">LIVE CASE · MTBI FINANCE</div>
+                    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-top:9px;">
+                      <div style="font-size:12.5px;">14 of 22 teams submitted</div>
+                      <div style="font-family:'Unbounded',sans-serif; font-size:17px; color:#fabb20;">{{ subCd.h }}:{{ subCd.m }}:{{ subCd.s }}</div>
+                    </div>
+                    <button onClick="{{ goCases }}" style="margin-top:12px; height:44px; width:100%; border-radius:9px; background:rgba(250,187,32,.15); border:1px solid rgba(250,187,32,.45); color:#fabb20; font-size:12.5px; font-weight:600;">Submission monitor</button>
+                  </div>
+
+                  <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">FEEDBACK COVERAGE</div>
+                    <div style="font-size:12.5px; color:#241a18; margin-top:8px; line-height:1.5;">6 delegates have no notes before JDCC. Marketing and MIS are the gaps.</div>
+                    <button onClick="{{ goFeedback }}" style="margin-top:11px; height:44px; padding:0 16px; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12.5px; font-weight:600;">Review coverage</button>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <button onClick="{{ noop }}" style="height:52px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Post announcement</button>
+                    <button onClick="{{ goCalendar }}" style="height:52px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Create event</button>
+                    <button onClick="{{ goCases }}" style="grid-column:span 2; height:48px; border-radius:10px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">Release a case</button>
+                  </div>
+                </div>
+              </sc-if>
+
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCases }}" hint-placeholder-val="{{ false }}">
+            <div>
+
+              <sc-if value="{{ vaultSealed }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#680009; min-height:100%; padding:26px 18px 34px; color:#f7f3ec;">
+                  <div style="text-align:center; padding-top:6px;">
+                    <span style="width:96px; height:96px; border-radius:50%; background:#f7f3ec; border:1px solid rgba(216,175,116,.5); display:inline-grid; place-items:center; box-shadow:0 0 28px rgba(250,187,32,.18);">
+                      <img src="uploads/JMCC%20LOGO.png" alt="JMCC" style="width:70px; height:70px; object-fit:contain; display:block;" />
+                    </span>
+                    <div style="font-size:9.5px; letter-spacing:.24em; color:#d8af74; font-weight:700; margin-top:14px;">SEALED</div>
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:20px; margin-top:12px; line-height:1.25;">JDCC — Marketing</div>
+                  </div>
+
+                  <div style="margin-top:26px; border:1px solid rgba(250,187,32,.34); border-radius:16px; background:#4d0007; padding:20px 16px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; inset:0 auto 0 0; width:60%; background:linear-gradient(90deg, transparent, rgba(250,187,32,.07), transparent); animation:sweep 5s infinite;"></div>
+                    <div style="text-align:center; font-size:9.5px; letter-spacing:.2em; color:#d8af74; font-weight:700;">OPENS IN</div>
+                    <div style="display:flex; justify-content:center; gap:8px; margin-top:14px;">
+                      <div style="text-align:center; min-width:62px;"><div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:30px; color:#fabb20; letter-spacing:-.03em;">{{ cd.d }}</div><div style="font-size:8.5px; letter-spacing:.16em; color:rgba(216,175,116,.8); margin-top:2px;">DAYS</div></div>
+                      <div style="text-align:center; min-width:62px;"><div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:30px; color:#fabb20; letter-spacing:-.03em;">{{ cd.h }}</div><div style="font-size:8.5px; letter-spacing:.16em; color:rgba(216,175,116,.8); margin-top:2px;">HRS</div></div>
+                      <div style="text-align:center; min-width:62px;"><div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:30px; color:#fabb20; letter-spacing:-.03em;">{{ cd.m }}</div><div style="font-size:8.5px; letter-spacing:.16em; color:rgba(216,175,116,.8); margin-top:2px;">MIN</div></div>
+                      <div style="text-align:center; min-width:62px;"><div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:30px; color:#fabb20; letter-spacing:-.03em;">{{ cd.s }}</div><div style="font-size:8.5px; letter-spacing:.16em; color:rgba(216,175,116,.8); margin-top:2px;">SEC</div></div>
+                    </div>
+                    <div style="text-align:center; font-size:12px; color:rgba(247,243,236,.72); margin-top:16px;">Case opens Saturday, 8:00 AM · EDT</div>
+                  </div>
+
+                  <div style="margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(216,175,116,.22); border:1px solid rgba(216,175,116,.22); border-radius:12px; overflow:hidden;">
+                    <div style="background:#680009; padding:12px 13px;"><div style="font-size:8.5px; letter-spacing:.14em; color:#d8af74; font-weight:700;">DISCIPLINE</div><div style="font-size:12.5px; margin-top:4px; font-weight:600;">Marketing</div></div>
+                    <div style="background:#680009; padding:12px 13px;"><div style="font-size:8.5px; letter-spacing:.14em; color:#d8af74; font-weight:700;">WORK WINDOW</div><div style="font-size:12.5px; margin-top:4px; font-weight:600;">5h 30m</div></div>
+                    <div style="background:#680009; padding:12px 13px;"><div style="font-size:8.5px; letter-spacing:.14em; color:#d8af74; font-weight:700;">DELIVERABLE</div><div style="font-size:12.5px; margin-top:4px; font-weight:600;">Deck · 12 slides max</div></div>
+                    <div style="background:#680009; padding:12px 13px;"><div style="font-size:8.5px; letter-spacing:.14em; color:#d8af74; font-weight:700;">ROSTER</div><div style="font-size:12.5px; margin-top:4px; font-weight:600;">Marketing · 4 delegates</div></div>
+                  </div>
+
+                  <div style="margin-top:16px; font-size:11.5px; color:rgba(247,243,236,.6); line-height:1.55;">Roster: Sofia Beauchamp · Marc Ouellette · Priya Ramanathan · Youssef Haddad. Materials stay sealed until release — no exceptions, no early links.</div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vaultOpen }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="position:sticky; top:0; z-index:5; background:#2b1416; color:#f7f3ec; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(250,187,32,.3);">
+                    <span style="font-size:10px; letter-spacing:.14em; color:#d8af74; font-weight:700;">WORK WINDOW</span>
+                    <span style="font-family:'Unbounded',sans-serif; font-size:15px; color:#fabb20;">{{ workCd.h }}:{{ workCd.m }}:{{ workCd.s }}</span>
+                  </div>
+                  <div style="position:relative; background:#f7f3ec; padding:20px 18px 30px;">
+                    <div data-anim="seal" style="position:absolute; left:0; right:0; top:0; height:190px; background:linear-gradient(180deg,#680009,#4d0007); border-bottom:2px solid #fabb20; animation:sealBreak 620ms ease-in forwards; pointer-events:none;"></div>
+                    <div data-anim="rise" style="animation:riseIn 520ms 260ms both;">
+                      <div style="font-size:9.5px; letter-spacing:.2em; color:#680009; font-weight:700;">UNSEALED · 8:00 AM EDT</div>
+                      <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009; margin-top:8px; line-height:1.25;">JDCC — Marketing</div>
+                      <div style="font-size:12px; color:#5e5c5a; margin-top:6px;">Submission closes 1:30 PM · America/Montreal</div>
+
+                      <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
+                        <sc-for list="{{ materials }}" as="mat" hint-placeholder-count="4">
+                          <button onClick="{{ noop }}" style="width:100%; text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:13px 14px; display:flex; align-items:center; gap:12px;">
+                            <span style="width:34px; height:34px; border-radius:8px; background:#680009; color:#f7f3ec; display:grid; place-items:center; font-size:9px; font-weight:700; letter-spacing:.04em; flex:none;">{{ mat.ext }}</span>
+                            <span style="min-width:0; flex:1;">
+                              <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ mat.name }}</span>
+                              <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:2px;">{{ mat.meta }}</span>
+                            </span>
+                          </button>
+                        </sc-for>
+                      </div>
+
+                      <div style="margin-top:16px; background:rgba(104,0,9,.06); border:1px solid rgba(104,0,9,.16); border-radius:12px; padding:12px 14px; font-size:11.5px; color:#5e5c5a; line-height:1.55;">Materials are cached on this device. If you lose signal, the case stays readable — submission does not.</div>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vaultSubmission }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="position:sticky; top:0; z-index:5; background:#8a1119; color:#f7f3ec; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #fabb20;">
+                    <span style="font-size:10px; letter-spacing:.14em; color:#fabb20; font-weight:700;">FINAL HOUR · UPLOAD NOW</span>
+                    <span style="font-family:'Unbounded',sans-serif; font-size:15px; color:#fabb20;">{{ subCd.h }}:{{ subCd.m }}:{{ subCd.s }}</span>
+                  </div>
+                  <div style="padding:20px 18px 30px;">
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:18px; color:#680009;">Submit your deliverable</div>
+                    <div style="font-size:12px; color:#5e5c5a; margin-top:6px; line-height:1.5;">Any Marketing delegate can submit. Everyone sees uploads live.</div>
+
+                    <div style="margin-top:16px; border:2px dashed rgba(104,0,9,.35); border-radius:14px; padding:24px 16px; text-align:center; background:#fff;">
+                      <div style="font-size:13px; font-weight:600; color:#241a18;">Drop files here</div>
+                      <div style="font-size:11px; color:#5e5c5a; margin-top:5px;">.pptx .pdf .xlsx · 100 MB max</div>
+                      <button onClick="{{ uploadVersion }}" style="margin-top:14px; height:44px; padding:0 22px; border-radius:9px; background:#680009; color:#f7f3ec; font-size:12.5px; font-weight:600;">Choose file</button>
+                    </div>
+
+                    <div style="margin-top:20px; font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">TEAM ACTIVITY</div>
+                    <div style="margin-top:9px; display:flex; flex-direction:column; gap:8px;">
+                      <sc-for list="{{ versions }}" as="v" hint-placeholder-count="2">
+                        <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                          <span style="min-width:0;">
+                            <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ v.file }}</span>
+                            <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:2px;">{{ v.who }} · {{ v.when }}</span>
+                          </span>
+                          <sc-if value="{{ v.latest }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:9.5px; font-weight:700; letter-spacing:.1em; color:#f7f3ec; background:#680009; border-radius:10px; padding:4px 8px; white-space:nowrap;">COUNTS</span>
+                          </sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="margin-top:14px; font-size:11.5px; color:#5e5c5a; line-height:1.55;">Resubmit as often as you like until 1:30 PM. The newest version is the one judged. Nothing is accepted after the window closes.</div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vaultSubmitted }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:26px 18px 30px;">
+                  <div style="background:#680009; border-radius:16px; padding:22px 18px; color:#f7f3ec; text-align:center;">
+                    <div style="width:52px; height:52px; border-radius:50%; border:2px solid #fabb20; display:grid; place-items:center; margin:0 auto;">
+                      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7" fill="none" stroke="#fabb20" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                    <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:18px; margin-top:14px;">Submitted</div>
+                    <div style="font-size:12px; color:rgba(247,243,236,.72); margin-top:7px; line-height:1.5;">12:58 PM EDT · by Marc Ouellette<br />32 minutes before close</div>
+                  </div>
+                  <div style="margin-top:18px; font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">VERSION LOG</div>
+                  <div style="margin-top:9px; display:flex; flex-direction:column; gap:8px;">
+                    <sc-for list="{{ versions }}" as="v" hint-placeholder-count="3">
+                      <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                        <span style="min-width:0;">
+                          <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ v.file }}</span>
+                          <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:2px;">{{ v.who }} · {{ v.when }}</span>
+                        </span>
+                        <sc-if value="{{ v.latest }}" hint-placeholder-val="{{ true }}">
+                          <span style="font-size:9.5px; font-weight:700; letter-spacing:.1em; color:#f7f3ec; background:#680009; border-radius:10px; padding:4px 8px; white-space:nowrap;">COUNTS</span>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:16px; background:rgba(104,0,9,.06); border:1px solid rgba(104,0,9,.16); border-radius:12px; padding:13px 14px; font-size:11.5px; color:#5e5c5a; line-height:1.55;">You can resubmit until 1:30 PM EDT. Late uploads are rejected by the server, not by a person — there is no appeal after the clock.</div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ vaultClosed }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:24px 18px 30px;">
+                  <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(94,92,90,.14); border-radius:20px; padding:6px 12px;">
+                    <span style="width:7px; height:7px; background:#5e5c5a; border-radius:50%;"></span>
+                    <span style="font-size:10px; letter-spacing:.14em; color:#5e5c5a; font-weight:700;">ARCHIVED · READ ONLY</span>
+                  </div>
+                  <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:18px; color:#680009; margin-top:14px; line-height:1.25;">JDCC — Marketing</div>
+                  <div style="font-size:12px; color:#5e5c5a; margin-top:6px;">Closed Jan 11, 1:30 PM · Placed 2nd of 22</div>
+                  <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+                    <sc-for list="{{ materials }}" as="mat" hint-placeholder-count="4">
+                      <button onClick="{{ noop }}" style="width:100%; text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; opacity:.9;">
+                        <span style="width:32px; height:32px; border-radius:8px; background:rgba(94,92,90,.18); color:#5e5c5a; display:grid; place-items:center; font-size:9px; font-weight:700; flex:none;">{{ mat.ext }}</span>
+                        <span style="font-size:12.5px; font-weight:600; color:#241a18;">{{ mat.name }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:20px; font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">PAST CASES</div>
+                  <div style="margin-top:9px; display:flex; flex-direction:column; gap:8px;">
+                    <sc-for list="{{ pastCases }}" as="pc" hint-placeholder-count="3">
+                      <button onClick="{{ noop }}" style="width:100%; text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 14px;">
+                        <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ pc.name }}</span>
+                        <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:3px;">{{ pc.meta }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ execCaseTools }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 18px 30px;">
+                  <div style="border-top:1px solid rgba(94,92,90,.2); padding-top:16px; font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">EXEC CONTROLS</div>
+                  <div style="margin-top:10px; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                    <div style="font-size:12.5px; font-weight:600; color:#241a18;">Scheduled queue · 3 cases</div>
+                    <div style="font-size:11.5px; color:#5e5c5a; margin-top:5px; line-height:1.5;">MTBI Finance releases Feb 7, 8:00 AM. Delegates get 5h 30m. Coach visibility: same time as delegates.</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">
+                      <button onClick="{{ noop }}" style="height:44px; border-radius:9px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Force release</button>
+                      <button onClick="{{ noop }}" style="height:44px; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">Extend deadline</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCabinet }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#4a0006; min-height:100%;">
+              <div style="padding:14px 16px 0;">
+                <button onClick="{{ back }}" style="height:44px; display:flex; align-items:center; gap:8px; color:#f7f3ec; font-size:12.5px; font-weight:600;">
+                  <span style="font-size:16px; line-height:1;">‹</span> Back
+                </button>
+              </div>
+              <div style="padding:4px 18px 18px;">
+                <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:21px; color:#f7f3ec;">{{ cab.name }}</div>
+                <div style="font-size:11.5px; color:rgba(247,243,236,.6); margin-top:6px;">{{ cab.seasons }}</div>
+                <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:14px; color:#fabb20; margin-top:12px;">{{ cab.progress }}</div>
+                <sc-if value="{{ cab.nudge }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:14px; border:1px solid rgba(250,187,32,.4); border-radius:12px; padding:13px 14px; background:rgba(250,187,32,.08);">
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#fabb20; font-weight:700;">NEAREST PIECE</div>
+                    <div style="font-size:12.5px; color:#f7f3ec; margin-top:6px; line-height:1.5;">{{ cab.nudgeText }}</div>
+                  </div>
+                </sc-if>
+              </div>
+
+              <div style="padding:0 12px 34px; display:flex; flex-direction:column; gap:18px;">
+                <sc-for list="{{ shelves }}" as="sh" hint-placeholder-count="4">
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.2em; color:#d8af74; font-weight:700; padding:0 6px 8px;">{{ sh.cat }}</div>
+                    <div style="background:linear-gradient(180deg,#5a0008 0%, #3d0005 100%); border-radius:10px; border-top:1px solid rgba(216,175,116,.28); box-shadow:0 14px 22px rgba(0,0,0,.35) inset, 0 6px 0 #2e0004; padding:14px 12px 16px;">
+                      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px 10px;">
+                        <sc-for list="{{ sh.pieces }}" as="p" hint-placeholder-count="6">
+                          <button onClick="{{ p.onOpen }}" style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:7px; min-height:44px;">
+                            <sc-if value="{{ p.earned }}" hint-placeholder-val="{{ true }}">
+                              <span style="display:block; width:100%; height:52px; position:relative; display:grid; place-items:center;">
+                                <span style="position:absolute; bottom:0; left:12%; right:12%; height:7px; border-radius:2px; background:linear-gradient(180deg,#7d3b1d,#4a0006); box-shadow:0 2px 5px rgba(0,0,0,.5);"></span>
+                                <span style="width:34px; height:34px; margin-bottom:8px; background:{{ p.fill }}; border-radius:{{ p.radius }}; transform:rotate({{ p.rot }}); box-shadow:0 0 16px rgba(250,187,32,.35);"></span>
+                              </span>
+                              <span style="font-size:9.5px; line-height:1.35; color:#f7f3ec; font-weight:600;">{{ p.name }}</span>
+                            </sc-if>
+                            <sc-if value="{{ p.empty }}" hint-placeholder-val="{{ false }}">
+                              <span style="display:block; width:100%; height:52px; position:relative; display:grid; place-items:center;">
+                                <span style="position:absolute; bottom:0; left:12%; right:12%; height:7px; border-radius:2px; background:#380004;"></span>
+                                <span style="width:34px; height:34px; margin-bottom:8px; border-radius:6px; background:#3a0004; box-shadow:inset 0 4px 9px rgba(0,0,0,.75), inset 0 -1px 0 rgba(216,175,116,.14);"></span>
+                              </span>
+                              <span style="font-size:9px; line-height:1.35; color:rgba(247,243,236,.42); font-weight:500;">{{ p.hint }}</span>
+                            </sc-if>
+                          </button>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:16px 18px 30px;">
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009;">{{ t.calendar }}</div>
+              <div style="display:flex; gap:0; margin-top:14px; border:1px solid rgba(104,0,9,.3); border-radius:9px; overflow:hidden;">
+                <sc-for list="{{ calViews }}" as="cv" hint-placeholder-count="3">
+                  <button onClick="{{ cv.onPick }}" style="flex:1; height:40px; font-size:12px; font-weight:600; color:{{ cv.color }}; background:{{ cv.bg }};">{{ cv.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex; gap:7px; margin-top:12px; overflow-x:auto; padding-bottom:2px;">
+                <sc-for list="{{ calChips }}" as="ch" hint-placeholder-count="4">
+                  <button onClick="{{ ch.onPick }}" style="height:32px; padding:0 13px; border-radius:16px; white-space:nowrap; font-size:11.5px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ ch.color }}; background:{{ ch.bg }};">{{ ch.label }}</button>
+                </sc-for>
+              </div>
+
+              <div style="margin-top:18px; display:flex; flex-direction:column; gap:16px;">
+                <sc-for list="{{ agenda }}" as="day" hint-placeholder-count="3">
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">{{ day.label }}</div>
+                    <div style="margin-top:9px; display:flex; flex-direction:column; gap:7px;">
+                      <sc-for list="{{ day.items }}" as="ev" hint-placeholder-count="2">
+                        <button onClick="{{ ev.onOpen }}" style="width:100%; text-align:left; background:{{ ev.bg }}; border:1px solid rgba(94,92,90,.18); border-left:3px solid #680009; border-radius:10px; padding:11px 13px; display:flex; gap:11px; align-items:center;">
+                          <span style="font-family:'Unbounded',sans-serif; font-size:11px; color:#680009; width:42px; flex:none;">{{ ev.time }}</span>
+                          <span style="flex:none;">{{ ev.marker }}</span>
+                          <span style="min-width:0;">
+                            <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ ev.title }}</span>
+                            <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:2px;">{{ ev.meta }}</span>
+                          </span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isDocs }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 18px 30px;">
+              <button onClick="{{ back }}" style="height:44px; display:flex; align-items:center; gap:8px; color:#680009; font-size:12.5px; font-weight:600;"><span style="font-size:16px; line-height:1;">‹</span> Back</button>
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009; margin-top:4px;">Documents</div>
+
+              <sc-if value="{{ isDelegateDocs }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="font-size:12px; color:#5e5c5a; margin-top:8px; font-weight:600;">3 of 5 documents complete</div>
+                  <div style="height:6px; border-radius:3px; background:rgba(94,92,90,.16); margin-top:9px; overflow:hidden;"><div style="width:60%; height:100%; background:#680009;"></div></div>
+                  <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+                    <sc-for list="{{ docs }}" as="d" hint-placeholder-count="5">
+                      <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 12px 12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <span style="min-width:0;">
+                          <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ d.name }}</span>
+                          <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:3px;">{{ d.meta }}</span>
+                        </span>
+                        <sc-if value="{{ d.signed }}" hint-placeholder-val="{{ true }}">
+                          <span style="font-size:11px; font-weight:700; color:#1f4433; white-space:nowrap;">Signed ✓</span>
+                        </sc-if>
+                        <sc-if value="{{ d.pending }}" hint-placeholder-val="{{ false }}">
+                          <button onClick="{{ openSigning }}" style="height:36px; padding:0 16px; border-radius:8px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600; white-space:nowrap;">Sign</button>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isExecDocs }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="font-size:12px; color:#5e5c5a; margin-top:8px; line-height:1.5;">120 delegates · 5 templates · 87 outstanding. Scroll the matrix sideways.</div>
+                  <div style="display:flex; gap:8px; margin-top:12px;">
+                    <button onClick="{{ noop }}" style="height:40px; padding:0 14px; border-radius:9px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Send reminder</button>
+                    <button onClick="{{ noop }}" style="height:40px; padding:0 14px; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">Export CSV</button>
+                  </div>
+                  <div style="margin-top:14px; overflow-x:auto; border:1px solid rgba(94,92,90,.2); border-radius:12px; background:#fff;">
+                    <div style="min-width:520px;">
+                      <div style="display:grid; grid-template-columns:150px repeat(5, 74px); background:#680009; color:#f7f3ec;">
+                        <div style="padding:9px 10px; font-size:10px; font-weight:700; letter-spacing:.08em;">DELEGATE</div>
+                        <sc-for list="{{ docCols }}" as="c" hint-placeholder-count="5">
+                          <div style="padding:9px 6px; font-size:9px; font-weight:700; letter-spacing:.06em; text-align:center; line-height:1.3;">{{ c }}</div>
+                        </sc-for>
+                      </div>
+                      <sc-for list="{{ matrix }}" as="row" hint-placeholder-count="8">
+                        <div style="display:grid; grid-template-columns:150px repeat(5, 74px); border-top:1px solid rgba(94,92,90,.14);">
+                          <div style="padding:9px 10px; font-size:11.5px; color:#241a18; font-weight:500;">{{ row.name }}</div>
+                          <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="5">
+                            <div style="display:grid; place-items:center; padding:9px 0;">
+                              <span style="width:16px; height:16px; border-radius:4px; background:{{ cell.bg }}; border:1px solid {{ cell.border }};"></span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display:flex; gap:14px; margin-top:10px; font-size:10.5px; color:#5e5c5a;">
+                    <span style="display:flex; align-items:center; gap:6px;"><span style="width:11px; height:11px; border-radius:3px; background:#680009;"></span> Signed</span>
+                    <span style="display:flex; align-items:center; gap:6px;"><span style="width:11px; height:11px; border-radius:3px; background:rgba(104,0,9,.32);"></span> In progress</span>
+                    <span style="display:flex; align-items:center; gap:6px;"><span style="width:11px; height:11px; border-radius:3px; background:#fff; border:1px solid rgba(94,92,90,.4);"></span> Not started</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isTasks }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 18px 30px;">
+              <button onClick="{{ back }}" style="height:44px; display:flex; align-items:center; gap:8px; color:#680009; font-size:12.5px; font-weight:600;"><span style="font-size:16px; line-height:1;">‹</span> Back</button>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px;">
+                <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009;">{{ t.tasks }}</div>
+                <button onClick="{{ noop }}" style="height:40px; padding:0 14px; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">Add task</button>
+              </div>
+              <div style="margin-top:16px; display:flex; flex-direction:column; gap:16px;">
+                <sc-for list="{{ taskGroups }}" as="g" hint-placeholder-count="4">
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:{{ g.color }}; font-weight:700;">{{ g.label }}</div>
+                    <div style="margin-top:9px; display:flex; flex-direction:column; gap:7px;">
+                      <sc-for list="{{ g.items }}" as="tk" hint-placeholder-count="2">
+                        <button onClick="{{ tk.onToggle }}" style="width:100%; text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:11px 13px; display:flex; gap:11px; align-items:flex-start; min-height:44px;">
+                          <span style="width:22px; height:22px; border-radius:6px; flex:none; margin-top:1px; display:grid; place-items:center; background:{{ tk.boxBg }}; border:1.5px solid {{ tk.boxBorder }};">
+                            <sc-if value="{{ tk.done }}" hint-placeholder-val="{{ false }}">
+                              <svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7" fill="none" stroke="#fabb20" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            </sc-if>
+                          </span>
+                          <span style="min-width:0; flex:1;">
+                            <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18; text-decoration:{{ tk.strike }};">{{ tk.title }}</span>
+                            <span style="display:flex; gap:8px; align-items:center; margin-top:5px;">
+                              <span style="font-size:9.5px; font-weight:700; letter-spacing:.08em; color:#680009; border:1px solid rgba(104,0,9,.3); border-radius:10px; padding:2px 7px;">{{ tk.source }}</span>
+                              <span style="font-size:11px; color:#5e5c5a;">{{ tk.due }}</span>
+                            </span>
+                          </span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isMessages }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:16px 18px 30px;">
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009;">{{ t.messages }}</div>
+              <div style="margin-top:16px; display:flex; flex-direction:column; gap:16px;">
+                <sc-for list="{{ channelGroups }}" as="cg" hint-placeholder-count="4">
+                  <div>
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">{{ cg.label }}</div>
+                    <div style="margin-top:9px; display:flex; flex-direction:column; gap:7px;">
+                      <sc-for list="{{ cg.items }}" as="ch" hint-placeholder-count="2">
+                        <button onClick="{{ ch.onOpen }}" style="width:100%; text-align:left; background:{{ ch.bg }}; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:44px;">
+                          <span style="min-width:0;">
+                            <span style="display:block; font-size:12.5px; font-weight:{{ ch.weight }}; color:#241a18;">{{ ch.name }}</span>
+                            <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:3px;">{{ ch.preview }}</span>
+                          </span>
+                          <sc-if value="{{ ch.unread }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-size:11px; font-weight:700; color:#f7f3ec; background:#680009; border-radius:10px; padding:3px 8px;">{{ ch.count }}</span>
+                          </sc-if>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+                <button onClick="{{ noop }}" style="height:44px; border-radius:10px; border:1px dashed rgba(104,0,9,.4); color:#680009; font-size:12.5px; font-weight:600;">New group chat</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isChannel }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; min-height:100%;">
+              <div style="background:{{ chanHeaderBg }}; padding:12px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:4;">
+                <button onClick="{{ back }}" style="width:44px; height:44px; margin-left:-12px; color:{{ chanHeaderFg }}; font-size:18px;">‹</button>
+                <span style="min-width:0;">
+                  <span style="display:block; font-family:'Unbounded',sans-serif; font-weight:600; font-size:14px; color:{{ chanHeaderFg }};">{{ chanName }}</span>
+                  <span style="display:block; font-size:10.5px; color:{{ chanHeaderSub }}; margin-top:2px;">{{ chanSub }}</span>
+                </span>
+              </div>
+              <div style="padding:14px 16px 8px; display:flex; flex-direction:column; gap:12px; flex:1;">
+                <div style="border:1px solid rgba(104,0,9,.22); border-radius:10px; padding:10px 12px; background:rgba(104,0,9,.05);">
+                  <div style="font-size:9.5px; letter-spacing:.14em; color:#680009; font-weight:700;">PINNED</div>
+                  <div style="font-size:11.5px; color:#241a18; margin-top:5px; line-height:1.5;">{{ chanPinned }}</div>
+                </div>
+                <sc-for list="{{ chanMsgs }}" as="m" hint-placeholder-count="4">
+                  <div style="display:flex; gap:10px;">
+                    <span style="width:30px; height:30px; border-radius:50%; background:#680009; color:#f7f3ec; display:grid; place-items:center; font-size:10px; font-weight:700; flex:none;">{{ m.initials }}</span>
+                    <span style="min-width:0;">
+                      <span style="display:flex; gap:8px; align-items:baseline;">
+                        <span style="font-size:12px; font-weight:700; color:#241a18;">{{ m.who }}</span>
+                        <span style="font-size:10px; color:#5e5c5a;">{{ m.when }}</span>
+                      </span>
+                      <span style="display:block; font-size:12.5px; color:#241a18; margin-top:3px; line-height:1.5;">{{ m.body }}</span>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ chanComposer }}" hint-placeholder-val="{{ true }}">
+                <div style="position:sticky; bottom:0; background:#f7f3ec; border-top:1px solid rgba(94,92,90,.18); padding:10px 14px; display:flex; gap:8px; align-items:center;">
+                  <input value="{{ draft }}" onChange="{{ onDraft }}" placeholder="Message" style="flex:1; height:44px; border-radius:22px; border:1px solid rgba(94,92,90,.3); padding:0 16px; font-size:12.5px; background:#fff; color:#241a18;" />
+                  <button onClick="{{ sendMsg }}" style="width:44px; height:44px; border-radius:22px; background:#680009; color:#f7f3ec; font-size:15px;">↑</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ chanReadOnly }}" hint-placeholder-val="{{ false }}">
+                <div style="position:sticky; bottom:0; background:#f7f3ec; border-top:1px solid rgba(94,92,90,.18); padding:12px 14px; display:flex; gap:10px; align-items:center; justify-content:space-between;">
+                  <span style="font-size:11.5px; color:#5e5c5a;">Announcements are read-only.</span>
+                  <button onClick="{{ noop }}" style="height:40px; padding:0 16px; border-radius:9px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Acknowledge</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isFeedback }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 18px 30px;">
+              <button onClick="{{ back }}" style="height:44px; display:flex; align-items:center; gap:8px; color:#680009; font-size:12.5px; font-weight:600;"><span style="font-size:16px; line-height:1;">‹</span> Back</button>
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009; margin-top:4px;">{{ t.feedback }}</div>
+
+              <sc-if value="{{ isDelegate }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
+                  <sc-for list="{{ notes }}" as="n" hint-placeholder-count="2">
+                    <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                      <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;">
+                        <span style="font-size:12.5px; font-weight:700; color:#241a18;">{{ n.author }}</span>
+                        <span style="font-size:10.5px; color:#5e5c5a;">{{ n.date }}</span>
+                      </div>
+                      <div style="font-size:11px; color:#5e5c5a; margin-top:3px;">{{ n.context }}</div>
+                      <div style="font-size:12.5px; color:#241a18; margin-top:9px; line-height:1.55;">{{ n.body }}</div>
+                      <sc-if value="{{ n.hasRubric }}" hint-placeholder-val="{{ true }}">
+                        <div style="display:flex; gap:7px; margin-top:11px; flex-wrap:wrap;">
+                          <sc-for list="{{ n.rubric }}" as="r" hint-placeholder-count="4">
+                            <span style="font-size:10.5px; font-weight:600; color:#680009; border:1px solid rgba(104,0,9,.28); border-radius:10px; padding:3px 9px;">{{ r }}</span>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                  <button onClick="{{ noop }}" style="height:44px; border-radius:10px; border:1px dashed rgba(104,0,9,.4); color:#680009; font-size:12.5px; font-weight:600;">Add a self-reflection note</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isCoach }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+                  <sc-for list="{{ coachDelegates }}" as="cdl" hint-placeholder-count="6">
+                    <button onClick="{{ noop }}" style="width:100%; text-align:left; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:44px;">
+                      <span style="min-width:0;">
+                        <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ cdl.name }}</span>
+                        <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:3px;">{{ cdl.meta }}</span>
+                      </span>
+                      <sc-if value="{{ cdl.flag }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size:9.5px; font-weight:700; letter-spacing:.08em; color:#f7f3ec; background:#680009; border-radius:10px; padding:4px 8px; white-space:nowrap;">NO NOTES</span>
+                      </sc-if>
+                    </button>
+                  </sc-for>
+                  <button onClick="{{ noop }}" style="height:44px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:12.5px; font-weight:600;">New note</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isExecLike }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;">
+                  <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:14px;">
+                    <div style="font-size:9.5px; letter-spacing:.16em; color:#5e5c5a; font-weight:700;">COVERAGE · JEUX DU COMMERCE CENTRAL</div>
+                    <div style="font-family:'Unbounded',sans-serif; font-size:17px; color:#680009; margin-top:9px;">18 / 24 delegates</div>
+                    <div style="height:6px; border-radius:3px; background:rgba(94,92,90,.16); margin-top:9px; overflow:hidden;"><div style="width:75%; height:100%; background:#680009;"></div></div>
+                    <div style="font-size:11.5px; color:#5e5c5a; margin-top:10px; line-height:1.5;">Six delegates have received nothing since October. Marketing (3) and MIS (2) are the gaps.</div>
+                  </div>
+                  <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+                    <sc-for list="{{ coachDelegates }}" as="cdl" hint-placeholder-count="6">
+                      <div style="background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                        <span style="min-width:0;">
+                          <span style="display:block; font-size:12.5px; font-weight:600; color:#241a18;">{{ cdl.name }}</span>
+                          <span style="display:block; font-size:11px; color:#5e5c5a; margin-top:3px;">{{ cdl.meta }}</span>
+                        </span>
+                        <sc-if value="{{ cdl.flag }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:9.5px; font-weight:700; letter-spacing:.08em; color:#f7f3ec; background:#680009; border-radius:10px; padding:4px 8px; white-space:nowrap;">NO NOTES</span>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isMore }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:16px 18px 30px;">
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; color:#680009;">{{ t.more }}</div>
+              <div style="margin-top:14px; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; overflow:hidden;">
+                <sc-for list="{{ moreItems }}" as="mi" hint-placeholder-count="6">
+                  <button onClick="{{ mi.onGo }}" style="width:100%; min-height:52px; text-align:left; padding:14px; border-bottom:1px solid rgba(94,92,90,.12); display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <span style="font-size:13px; font-weight:600; color:#241a18;">{{ mi.label }}</span>
+                    <span style="font-size:15px; color:#5e5c5a;">›</span>
+                  </button>
+                </sc-for>
+              </div>
+              <button onClick="{{ openInstall }}" style="margin-top:14px; width:100%; min-height:52px; border-radius:12px; background:#680009; color:#f7f3ec; font-size:12.5px; font-weight:600;">Add JMCC to your home screen</button>
+              <div style="margin-top:18px; font-size:11px; color:#5e5c5a; line-height:1.55;">Signed in as {{ userName }} · JMCC 2026–2027<br />Version 0.9.4 · prototype build</div>
+            </div>
+          </sc-if>
+
+        </div>
+
+        <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:none;">
+            <div style="background:#680009; padding-top:6px; padding-bottom:22px; display:grid; grid-template-columns:repeat(5, 1fr); border-top:1px solid rgba(250,187,32,.18);">
+              <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="5">
+                <button onClick="{{ tab.onGo }}" style="min-height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; position:relative;">
+                  <span style="width:18px; height:18px; border-radius:{{ tab.iconRadius }}; border:2px solid {{ tab.color }}; background:{{ tab.iconFill }};"></span>
+                  <span style="font-size:9.5px; font-weight:600; color:{{ tab.color }}; letter-spacing:.02em;">{{ tab.label }}</span>
+                  <sc-if value="{{ tab.badge }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute; top:2px; right:22%; min-width:15px; height:15px; border-radius:8px; background:#fabb20; color:#3d0005; font-size:9px; font-weight:700; display:grid; place-items:center; padding:0 4px;">{{ tab.count }}</span>
+                  </sc-if>
+                </button>
+              </sc-for>
+            </div>
+            <div style="background:#680009; height:6px; position:relative;">
+              <span style="position:absolute; bottom:1px; left:50%; transform:translateX(-50%); width:120px; height:4px; border-radius:2px; background:rgba(247,243,236,.5);"></span>
+            </div>
+          </div>
+        </sc-if>
+
+        </div>
+
+        <sc-if value="{{ sheetPiece }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background:rgba(20,10,8,.55); display:flex; align-items:flex-end;">
+            <div data-anim="rise" style="width:100%; background:#4a0006; border-radius:20px 20px 0 0; padding:18px 20px 30px; animation:sheetUp 240ms ease-out;">
+              <div style="width:38px; height:4px; border-radius:2px; background:rgba(247,243,236,.3); margin:0 auto 16px;"></div>
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:17px; color:#fabb20;">{{ piece.name }}</div>
+              <div style="margin-top:12px; display:flex; flex-direction:column; gap:7px;">
+                <sc-for list="{{ piece.rows }}" as="pr" hint-placeholder-count="4">
+                  <div style="display:flex; justify-content:space-between; gap:12px; font-size:11.5px;">
+                    <span style="color:rgba(247,243,236,.55);">{{ pr.k }}</span>
+                    <span style="color:#f7f3ec; font-weight:600; text-align:right;">{{ pr.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+                <button onClick="{{ copyResume }}" style="height:44px; border-radius:9px; background:#fabb20; color:#3d0005; font-size:12.5px; font-weight:700;">{{ copyLabel }}</button>
+                <button onClick="{{ closeSheet }}" style="height:44px; border-radius:9px; border:1px solid rgba(247,243,236,.35); color:#f7f3ec; font-size:12.5px; font-weight:600;">Close</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheetEvent }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background:rgba(20,10,8,.45); display:flex; align-items:flex-end;">
+            <div data-anim="rise" style="width:100%; background:#f7f3ec; border-radius:20px 20px 0 0; padding:18px 20px 30px; animation:sheetUp 240ms ease-out;">
+              <div style="width:38px; height:4px; border-radius:2px; background:rgba(94,92,90,.3); margin:0 auto 16px;"></div>
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:17px; color:#680009;">{{ ev.title }}</div>
+              <div style="font-size:12px; color:#5e5c5a; margin-top:7px; line-height:1.55;">{{ ev.when }}<br />{{ ev.where }}</div>
+              <div style="font-size:12.5px; color:#241a18; margin-top:12px; line-height:1.55;">{{ ev.desc }}</div>
+              <div style="font-size:11.5px; color:#5e5c5a; margin-top:10px;">{{ ev.who }}</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px;">
+                <button onClick="{{ noop }}" style="height:44px; border-radius:9px; background:#680009; color:#f7f3ec; font-size:12px; font-weight:600;">Add to calendar</button>
+                <button onClick="{{ closeSheet }}" style="height:44px; border-radius:9px; border:1px solid #680009; color:#680009; font-size:12px; font-weight:600;">Close</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheetSigning }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background:#f7f3ec; display:flex; flex-direction:column;">
+            <div style="background:#680009; color:#f7f3ec; padding:12px 14px; display:flex; align-items:center; gap:8px;">
+              <button onClick="{{ closeSheet }}" style="width:44px; height:44px; margin-left:-10px; color:#f7f3ec; font-size:18px;">‹</button>
+              <span style="font-family:'Unbounded',sans-serif; font-weight:600; font-size:14px;">Media &amp; photo release</span>
+            </div>
+            <div style="flex:1; padding:16px; display:flex; flex-direction:column;">
+              <div style="flex:1; border:2px solid rgba(104,0,9,.3); border-radius:12px; background:#fff; padding:16px; display:flex; flex-direction:column; gap:10px;">
+                <div style="height:9px; width:70%; background:rgba(94,92,90,.16); border-radius:3px;"></div>
+                <div style="height:9px; width:92%; background:rgba(94,92,90,.16); border-radius:3px;"></div>
+                <div style="height:9px; width:84%; background:rgba(94,92,90,.16); border-radius:3px;"></div>
+                <div style="height:9px; width:46%; background:rgba(94,92,90,.16); border-radius:3px;"></div>
+                <div style="margin-top:auto; border-top:1px dashed rgba(94,92,90,.35); padding-top:12px;">
+                  <div style="font-size:10.5px; color:#5e5c5a;">Sign here</div>
+                  <div style="height:52px; border:1px solid rgba(94,92,90,.3); border-radius:8px; margin-top:6px;"></div>
+                </div>
+              </div>
+              <div style="text-align:center; font-size:10.5px; color:#5e5c5a; margin-top:10px;">Signing powered by DocuSeal — secure</div>
+              <button onClick="{{ completeSigning }}" style="margin-top:12px; height:48px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:13px; font-weight:600;">Sign</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheetDietary }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background:#f7f3ec; display:flex; flex-direction:column;">
+            <div style="background:#680009; color:#f7f3ec; padding:12px 14px; display:flex; align-items:center; gap:8px;">
+              <button onClick="{{ closeSheet }}" style="width:44px; height:44px; margin-left:-10px; color:#f7f3ec; font-size:18px;">‹</button>
+              <span style="font-family:'Unbounded',sans-serif; font-weight:600; font-size:14px;">{{ t.dietary }}</span>
+            </div>
+            <div style="flex:1; overflow-y:auto; padding:18px 18px 30px; display:flex; flex-direction:column; gap:14px;">
+              <div>
+                <div style="font-size:11px; font-weight:600; color:#5e5c5a; letter-spacing:.04em;">{{ t.restrictions }}</div>
+                <input placeholder="{{ t.restrictionsPh }}" style="margin-top:7px; width:100%; height:46px; border-radius:9px; border:1px solid rgba(94,92,90,.3); padding:0 13px; font-size:12.5px; background:#fff;" />
+              </div>
+              <div>
+                <div style="font-size:11px; font-weight:600; color:#5e5c5a; letter-spacing:.04em;">{{ t.allergies }}</div>
+                <input placeholder="{{ t.allergiesPh }}" style="margin-top:7px; width:100%; height:46px; border-radius:9px; border:1px solid rgba(94,92,90,.3); padding:0 13px; font-size:12.5px; background:#fff;" />
+              </div>
+              <div>
+                <div style="font-size:11px; font-weight:600; color:#5e5c5a; letter-spacing:.04em;">{{ t.accessibility }}</div>
+                <textarea rows="3" placeholder="{{ t.accessibilityPh }}" style="margin-top:7px; width:100%; border-radius:9px; border:1px solid rgba(94,92,90,.3); padding:11px 13px; font-size:12.5px; background:#fff; resize:none;"></textarea>
+              </div>
+              <div style="font-size:11px; color:#5e5c5a; line-height:1.55;">{{ t.dietaryNote }}</div>
+              <button onClick="{{ closeSheet }}" style="height:48px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:13px; font-weight:600;">{{ t.submit }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheetInstall }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background:rgba(20,10,8,.55); display:flex; align-items:flex-end;">
+            <div data-anim="rise" style="width:100%; background:#f7f3ec; border-radius:20px 20px 0 0; padding:18px 20px 30px; animation:sheetUp 240ms ease-out;">
+              <div style="width:38px; height:4px; border-radius:2px; background:rgba(94,92,90,.3); margin:0 auto 16px;"></div>
+              <div style="font-family:'Unbounded',sans-serif; font-weight:700; font-size:17px; color:#680009; line-height:1.3;">Put JMCC on your home screen</div>
+              <div style="font-size:12px; color:#5e5c5a; margin-top:8px; line-height:1.55;">Safari can't install apps for you. Three taps and it behaves like any other app — offline schedule, case materials, notifications.</div>
+              <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; gap:12px; align-items:center; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px;">
+                  <span style="width:32px; height:32px; border-radius:8px; background:#680009; color:#f7f3ec; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none;">1</span>
+                  <span style="font-size:12.5px; color:#241a18; line-height:1.45;">Tap <strong>Share</strong> in the Safari toolbar</span>
+                  <span style="margin-left:auto; width:26px; height:26px; border:1.6px solid #680009; border-radius:6px; display:grid; place-items:center; color:#680009; font-size:13px; flex:none;">↑</span>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px;">
+                  <span style="width:32px; height:32px; border-radius:8px; background:#680009; color:#f7f3ec; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none;">2</span>
+                  <span style="font-size:12.5px; color:#241a18; line-height:1.45;">Scroll and choose <strong>Add to Home Screen</strong></span>
+                  <span style="margin-left:auto; width:26px; height:26px; border:1.6px solid #680009; border-radius:6px; display:grid; place-items:center; color:#680009; font-size:15px; flex:none;">+</span>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center; background:#fff; border:1px solid rgba(94,92,90,.18); border-radius:12px; padding:12px 13px;">
+                  <span style="width:32px; height:32px; border-radius:8px; background:#680009; color:#f7f3ec; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none;">3</span>
+                  <span style="font-size:12.5px; color:#241a18; line-height:1.45;">Tap <strong>Add</strong>. The wolf mark appears on your home screen.</span>
+                  <span style="margin-left:auto; width:26px; height:26px; border-radius:6px; background:#680009; display:grid; place-items:center; flex:none;">
+                    <svg width="15" height="15" viewBox="0 0 40 40"><path d="M20 4 L34 9.5 V21 C34 29 27.5 34.5 20 37 C12.5 34.5 6 29 6 21 V9.5 Z" fill="none" stroke="#fabb20" stroke-width="2.4"></path><path d="M13 16 L20 30 L27 16 Z" fill="#d8af74"></path></svg>
+                  </span>
+                </div>
+              </div>
+              <div style="font-size:11px; color:#5e5c5a; margin-top:14px; line-height:1.55;">Notifications for case releases only work once the app is installed. Critical notices also go to your Concordia email.</div>
+              <button onClick="{{ closeSheet }}" style="margin-top:14px; width:100%; height:48px; border-radius:10px; background:#680009; color:#f7f3ec; font-size:13px; font-weight:600;">Got it</button>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="width:250px; position:sticky; top:36px; display:flex; flex-direction:column; gap:16px; background:#fff; border:1px dashed rgba(104,0,9,.4); border-radius:14px; padding:16px;">
+    <div style="font-size:9.5px; letter-spacing:.18em; color:#680009; font-weight:700;">PROTOTYPE CONTROLS</div>
+
+    <div>
+      <div style="font-size:10.5px; color:#5e5c5a; font-weight:600; margin-bottom:7px;">Device</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+        <sc-for list="{{ deviceOptions }}" as="dv" hint-placeholder-count="2">
+          <button onClick="{{ dv.onPick }}" style="min-height:36px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ dv.color }}; background:{{ dv.bg }};">{{ dv.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10.5px; color:#5e5c5a; font-weight:600; margin-bottom:7px;">Role</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+        <sc-for list="{{ roleOptions }}" as="ro" hint-placeholder-count="4">
+          <button onClick="{{ ro.onPick }}" style="min-height:36px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ ro.color }}; background:{{ ro.bg }};">{{ ro.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10.5px; color:#5e5c5a; font-weight:600; margin-bottom:7px;">Case vault state</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <sc-for list="{{ vaultOptions }}" as="vo" hint-placeholder-count="5">
+          <button onClick="{{ vo.onPick }}" style="min-height:34px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ vo.color }}; background:{{ vo.bg }}; text-align:left; padding:0 10px;">{{ vo.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10.5px; color:#5e5c5a; font-weight:600; margin-bottom:7px;">Cabinet fill</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <sc-for list="{{ cabOptions }}" as="co" hint-placeholder-count="3">
+          <button onClick="{{ co.onPick }}" style="min-height:34px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ co.color }}; background:{{ co.bg }}; text-align:left; padding:0 10px;">{{ co.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <button onClick="{{ toggleOffline }}" style="min-height:36px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:{{ offlineColor }}; background:{{ offlineBg }};">{{ offlineLabel }}</button>
+      <button onClick="{{ openInstall }}" style="min-height:36px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid rgba(104,0,9,.3); color:#680009; background:#fff;">iOS install sheet</button>
+    </div>
+
+    <div style="font-size:10px; color:#5e5c5a; line-height:1.5; border-top:1px solid rgba(94,92,90,.16); padding-top:12px;">Mock data only. Times display in America/Montreal; the countdown runs from a server offset, not the device clock.</div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:720,&quot;height&quot;:940}}">
+class Component extends DCLogic {
+  release = Date.now() + (2 * 86400 + 14 * 3600 + 6 * 60) * 1000;
+  workEnd = Date.now() + (4 * 3600 + 12 * 60) * 1000;
+  subEnd = Date.now() + (47 * 60) * 1000;
+
+  PIECES = [
+    { id: 1, cat: 'Placements', name: '1st · JDCC', hint: 'Win a discipline', tone: 'gold', shape: 'disc', meta: ['Jan 2026', 'Marketing', 'Marketing'] },
+    { id: 2, cat: 'Placements', name: '2nd · JDCC', hint: 'Place at JDCC', tone: 'sand', shape: 'disc', meta: ['Nov 2025', 'Marketing', 'Marketing'] },
+    { id: 3, cat: 'Placements', name: '3rd · MTBI', hint: 'Place at MTBI', tone: 'sand', shape: 'disc', meta: ['Feb 2026', 'Strategy', 'Strategy'] },
+    { id: 4, cat: 'Placements', name: 'Finalist · ICBC', hint: 'Reach an ICBC final', tone: 'sand', shape: 'diamond', meta: ['Mar 2026', 'Finance', 'Finance'] },
+    { id: 5, cat: 'Placements', name: '1st · JMUCC', hint: 'Win JMUCC', tone: 'gold', shape: 'disc', meta: ['Mar 2027', 'Strategy', 'Strategy'] },
+    { id: 6, cat: 'Placements', name: 'Three podiums, one season', hint: 'Podium three times in a season', tone: 'gold', shape: 'diamond', meta: ['2026–27', 'All disciplines', '—'] },
+
+    { id: 7, cat: 'Seasons', name: 'Season 2024–25', hint: 'Complete a season', tone: 'sand', shape: 'bar', meta: ['Apr 2025', 'First year', '—'] },
+    { id: 8, cat: 'Seasons', name: 'Season 2025–26', hint: 'Complete a season', tone: 'sand', shape: 'bar', meta: ['Apr 2026', 'Second year', '—'] },
+    { id: 9, cat: 'Seasons', name: 'Season 2026–27', hint: 'Come back for a third', tone: 'gold', shape: 'bar', meta: ['Apr 2027', 'Third year', '—'] },
+    { id: 10, cat: 'Seasons', name: 'Season 2027–28', hint: 'Come back for a fourth', tone: 'gold', shape: 'bar', meta: ['Apr 2028', 'Fourth year', '—'] },
+
+    { id: 11, cat: 'Milestones', name: 'First case submitted', hint: 'Submit your first case', tone: 'sand', shape: 'diamond', meta: ['Nov 2025', 'JDCC', 'Marketing'] },
+    { id: 12, cat: 'Milestones', name: 'First competition', hint: 'Compete once', tone: 'sand', shape: 'diamond', meta: ['Nov 2025', 'JDCC', 'Marketing'] },
+    { id: 13, cat: 'Milestones', name: 'Three disciplines', hint: 'Compete in a third discipline', tone: 'sand', shape: 'diamond', meta: ['Feb 2026', 'Mkt · Strat · Fin', '—'] },
+    { id: 14, cat: 'Milestones', name: 'Ten practice cases', hint: 'Finish ten practice cases', tone: 'sand', shape: 'bar', meta: ['Jan 2026', 'JDCC', '—'] },
+    { id: 15, cat: 'Milestones', name: 'Delivered live', hint: 'Present to a live jury', tone: 'sand', shape: 'diamond', meta: ['Jan 2026', 'JDCC', 'Marketing'] },
+    { id: 16, cat: 'Milestones', name: 'Travelled with the delegation', hint: 'Travel to a competition', tone: 'sand', shape: 'bar', meta: ['Jan 2026', 'Trois-Rivières', '—'] },
+    { id: 17, cat: 'Milestones', name: 'Case captain', hint: 'Lead a discipline case team', tone: 'gold', shape: 'diamond', meta: ['Feb 2026', 'MTBI', 'Strategy'] },
+    { id: 18, cat: 'Milestones', name: 'Twenty-five practice hours', hint: 'Log 25 practice hours', tone: 'sand', shape: 'bar', meta: ['Mar 2026', 'Season total', '—'] },
+    { id: 19, cat: 'Milestones', name: 'Cross-discipline sub', hint: 'Step in for another discipline', tone: 'sand', shape: 'diamond', meta: ['Mar 2026', 'Operations', 'Operations'] },
+    { id: 20, cat: 'Milestones', name: 'Orientation complete', hint: 'Finish September orientation', tone: 'sand', shape: 'bar', meta: ['Sep 2025', 'JMCC', '—'] },
+
+    { id: 21, cat: 'Commendations', name: "Coach's pick", hint: 'Nominated by your coach', tone: 'gold', shape: 'disc', meta: ['Jan 2026', 'JDCC', 'D. Lavoie'] },
+    { id: 22, cat: 'Commendations', name: 'Most improved', hint: 'Nominated by your coach', tone: 'gold', shape: 'disc', meta: ['Apr 2026', 'Season close', 'D. Lavoie'] },
+    { id: 23, cat: 'Commendations', name: 'Team captain', hint: 'Named captain by your discipline', tone: 'gold', shape: 'diamond', meta: ['Sep 2026', 'JDCC', '—'] },
+    { id: 24, cat: 'Commendations', name: 'Peer mentor', hint: 'Mentor a first-year delegate', tone: 'sand', shape: 'bar', meta: ['Feb 2027', 'JMCC', '—'] },
+    { id: 25, cat: 'Commendations', name: 'Wolf pin', hint: '', tone: 'gold', shape: 'disc', meta: ['—', 'Awarded rarely', '—'], secret: true },
+    { id: 26, cat: 'Commendations', name: 'Alumni crest', hint: '', tone: 'gold', shape: 'diamond', meta: ['—', 'Awarded rarely', '—'], secret: true }
+  ];
+
+  CABS = {
+    one: { name: 'Sofia Beauchamp', seasons: 'First season · Marketing', earned: [11], nudgeText: 'Your first piece: submit a case. The JDCC vault opens Saturday.' },
+    nine: { name: 'Sofia Beauchamp', seasons: 'Two seasons · Marketing, Strategy', earned: [2, 7, 8, 11, 12, 13, 14, 17, 21], nudgeText: 'Closest piece: compete in a third discipline. Operations has two open seats for MTBI.' },
+    full: { name: 'Sofia Beauchamp', seasons: 'Four seasons · Marketing, Strategy, Finance, Operations', earned: [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], nudgeText: '' }
+  };
+
+  state = {
+    role: 'delegate', screen: 'home', stack: [], vault: 'sealed', cab: 'nine',
+    offline: false, device: 'mobile', promo: true, calView: 'agenda', calFilter: 'mine',
+    sheet: null, pieceId: null, eventId: null, channel: null, draft: '', copied: false,
+    now: Date.now(),
+    msgs: [
+      { who: 'Priya Ramanathan', initials: 'PR', when: '7:12 AM', body: 'Deck skeleton is in the drive folder. Slides 4–7 are still empty.' },
+      { who: 'Marc Ouellette', initials: 'MO', when: '7:26 AM', body: 'I can take the pricing exhibit. Sofia, do you want Q&A prep or the recommendation slide?' },
+      { who: 'Youssef Haddad', initials: 'YH', when: '7:31 AM', body: 'Room MB 3.210 is booked until noon if we want to rehearse.' },
+      { who: 'Dominique Lavoie', initials: 'DL', when: '7:38 AM', body: 'Rehearse the first two minutes twice. That is where last round fell apart.' }
+    ],
+    tasksDone: { 3: true, 6: true }
+  };
+
+  TASKS = [
+    { id: 1, group: 'Overdue', title: 'Sign: Media & photo release', source: 'Auto', due: 'Due Nov 6', locked: true },
+    { id: 2, group: 'Today', title: 'Submit dietary restrictions', source: 'From exec', due: 'Due today, 5:00 PM' },
+    { id: 3, group: 'Today', title: 'Read the JDCC rulebook', source: 'From coach', due: 'Due today' },
+    { id: 4, group: 'This week', title: 'Book travel form with Priya', source: 'Self', due: 'Fri, Nov 7' },
+    { id: 5, group: 'This week', title: 'Practice case #7 — pricing', source: 'From coach', due: 'Sat, Nov 8' },
+    { id: 6, group: 'Later', title: 'Order delegation blazer', source: 'From exec', due: 'Nov 24' },
+    { id: 7, group: 'Later', title: 'Draft self-reflection after MTBI', source: 'Self', due: 'Feb 9' }
+  ];
+
+  componentDidMount() { this.timer = setInterval(() => this.setState({ now: Date.now() }), 1000); }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  pad(n) { return String(n).padStart(2, '0'); }
+  cdOf(target) {
+    const s = Math.max(0, Math.floor((target - this.state.now) / 1000));
+    return { d: Math.floor(s / 86400), h: this.pad(Math.floor(s / 3600) % 24), m: this.pad(Math.floor(s / 60) % 60), s: this.pad(s % 60) };
+  }
+  go = (screen) => this.setState(st => ({ screen, stack: [...st.stack, st.screen], sheet: null }));
+  tabGo = (screen) => this.setState({ screen, stack: [], sheet: null });
+  back = () => this.setState(st => ({ screen: st.stack.length ? st.stack[st.stack.length - 1] : 'home', stack: st.stack.slice(0, -1) }));
+
+  toneFill(tone) { return tone === 'gold' ? 'linear-gradient(150deg,#ffd86b,#fabb20 55%,#b57f0d)' : 'linear-gradient(150deg,#ecd0a8,#d8af74 55%,#9d7642)'; }
+  shapeRadius(shape) { return shape === 'disc' ? '50%' : shape === 'bar' ? '4px' : '5px'; }
+
+  renderVals() {
+    const s = this.state;
+    const role = s.role;
+    const isDelegate = role === 'delegate';
+    const isCoach = role === 'coach';
+    const isExecLike = role === 'exec' || role === 'super';
+    const roleLabels = { delegate: 'Delegate', coach: 'Coach', exec: 'Executive', super: 'Superuser' };
+    const isMobile = s.device === 'mobile';
+    const t = {
+      next: 'NEXT UP', needs: 'NEEDS YOU', today: 'TODAY', recent: 'RECENT',
+      home: 'Home', calendar: 'Calendar', cases: 'Cases', messages: 'Messages', more: 'More',
+      tasks: 'Tasks', feedback: 'Feedback', documents: 'Documents', cabinet: 'My Cabinet',
+      dietary: 'Dietary restrictions', open: 'Open', submit: 'Submit',
+      restrictions: 'Dietary restrictions', restrictionsPh: 'Vegetarian, no pork…',
+      allergies: 'Allergies', allergiesPh: 'Peanuts, shellfish…',
+      accessibility: 'Accessibility needs', accessibilityPh: 'Anything we should know for the weekend',
+      dietaryNote: 'Shared with the JDCC caterer only, then deleted after the competition.'
+    };
+
+    const cabData = this.CABS[s.cab];
+    const earnedSet = new Set(cabData.earned);
+    const cats = ['Placements', 'Seasons', 'Milestones', 'Commendations'];
+    const shelves = cats.map(cat => ({
+      cat,
+      pieces: this.PIECES.filter(p => p.cat === cat).map(p => {
+        const earned = earnedSet.has(p.id);
+        return {
+          name: p.name, earned, empty: !earned,
+          hint: p.secret ? '?' : p.hint,
+          fill: this.toneFill(p.tone),
+          radius: this.shapeRadius(p.shape),
+          rot: p.shape === 'diamond' ? '45deg' : '0deg',
+          onOpen: () => earned && this.setState({ sheet: 'piece', pieceId: p.id, copied: false })
+        };
+      })
+    }));
+    const piece = this.PIECES.find(p => p.id === s.pieceId) || this.PIECES[0];
+
+    const EVENTS = {
+      practice: { title: 'Practice case — pricing', when: 'Today · 09:00–12:00 EDT', where: 'MB 3.210, John Molson Building', desc: 'Three-hour timed case with a 10-minute presentation to D. Lavoie. Bring a laptop and a printed copy of the rubric.', who: 'Marketing · 4 attending' },
+      social: { title: "Delegate social", when: 'Today · 18:30 EDT', where: "Reggie's, 1455 De Maisonneuve W", desc: 'Informal. Meet the JDCC delegates before the roster locks Friday.', who: '38 going' },
+      deadline: { title: 'Travel authorization due', when: 'Fri, Nov 7 · 17:00 EDT', where: 'Documents', desc: 'Unsigned forms mean no bus seat. The registrar does not make exceptions after Friday.', who: 'All JDCC delegates' },
+      release: { title: 'Case release — JDCC', when: 'Sat, Nov 8 · 08:00 EDT', where: 'Case vault', desc: 'Materials unseal automatically. Work window is 5h 30m; submission closes 13:30.', who: 'All Marketing delegates' }
+    };
+    const mk = (kind) => kind === 'deadline' ? '▬' : kind === 'comp' ? '◆' : kind === 'practice' ? '■' : '●';
+    const evBtn = (id) => () => this.setState({ sheet: 'event', eventId: id });
+    const agenda = [
+      { label: 'TODAY · WED, NOV 5', items: [
+        { time: '09:00', title: 'Practice case — MB 3.210', meta: 'Practice · 3h', marker: '■', bg: '#fff', onOpen: evBtn('practice') },
+        { time: '18:30', title: "Delegate social — Reggie's", meta: 'Social', marker: '●', bg: '#fff', onOpen: evBtn('social') }
+      ]},
+      { label: 'THU, NOV 6', items: [
+        { time: '17:00', title: 'Media & photo release due', meta: 'Deadline · points, not durations', marker: '▬', bg: 'rgba(104,0,9,.05)', onOpen: evBtn('deadline') }
+      ]},
+      { label: 'FRI, NOV 7', items: [
+        { time: '12:00', title: 'Roster lock — JDCC', meta: 'Admin', marker: '◆', bg: '#fff', onOpen: evBtn('deadline') },
+        { time: '17:00', title: 'Travel authorization due', meta: 'Deadline', marker: '▬', bg: 'rgba(104,0,9,.05)', onOpen: evBtn('deadline') }
+      ]},
+      { label: 'SAT, NOV 8', items: [
+        { time: '08:00', title: 'Case release — JDCC', meta: 'Competition · vault unseals', marker: '◆', bg: '#fff', onOpen: evBtn('release') }
+      ]}
+    ];
+    const ev = EVENTS[s.eventId] || EVENTS.practice;
+
+    const pick = (active) => ({ bg: active ? '#680009' : '#fff', color: active ? '#f7f3ec' : '#680009' });
+    const calViews = ['Month', 'Week', 'Agenda'].map(v => ({
+      label: v, ...pick(s.calView === v.toLowerCase()), onPick: () => this.setState({ calView: v.toLowerCase() })
+    }));
+    const calChips = [
+      { key: 'mine', label: 'My events' }, { key: 'all', label: 'All events' },
+      { key: 'comp', label: 'JDCC' }, { key: 'team', label: 'Marketing' }
+    ].map(c => ({ label: c.label, ...pick(s.calFilter === c.key), onPick: () => this.setState({ calFilter: c.key }) }));
+
+    const docs = [
+      { name: 'Liability waiver', meta: 'Signed Oct 28, 9:14 AM · download PDF', signed: true, pending: false },
+      { name: 'Code of conduct', meta: 'Signed Oct 28, 9:17 AM · download PDF', signed: true, pending: false },
+      { name: 'Participation agreement', meta: 'Signed Nov 1, 6:02 PM · download PDF', signed: true, pending: false },
+      { name: 'Media & photo release', meta: 'Not started · due Nov 6', signed: false, pending: true },
+      { name: 'Travel authorization', meta: 'In progress · due Nov 7', signed: false, pending: true }
+    ];
+    const cellStyles = [
+      { bg: '#680009', border: '#680009' },
+      { bg: 'rgba(104,0,9,.32)', border: 'rgba(104,0,9,.32)' },
+      { bg: '#fff', border: 'rgba(94,92,90,.4)' }
+    ];
+    const names = ['Sofia Beauchamp', 'Marc Ouellette', 'Priya Ramanathan', 'Youssef Haddad', 'Émilie Fortin', 'Daniel Nguyen', 'Amina Cherif', 'Liam Gallagher-Roy'];
+    const matrix = names.map((name, i) => ({
+      name,
+      cells: [0, 1, 2, 3, 4].map(j => cellStyles[(i + j * 2) % 3])
+    }));
+
+    const groupOrder = ['Overdue', 'Today', 'This week', 'Later'];
+    const taskGroups = groupOrder.map(g => ({
+      label: g.toUpperCase(),
+      color: g === 'Overdue' ? '#8a1119' : '#5e5c5a',
+      items: this.TASKS.filter(tk => tk.group === g).map(tk => {
+        const done = !!s.tasksDone[tk.id];
+        return {
+          title: tk.title, source: tk.source, due: tk.due, done,
+          strike: done ? 'line-through' : 'none',
+          boxBg: done ? '#680009' : '#fff',
+          boxBorder: done ? '#680009' : 'rgba(94,92,90,.4)',
+          onToggle: () => this.setState(st => ({ tasksDone: { ...st.tasksDone, [tk.id]: !st.tasksDone[tk.id] } }))
+        };
+      })
+    })).filter(g => g.items.length);
+
+    const chan = (key, name, sub, opts) => ({ key, name, sub, ...opts });
+    const CHANNELS = {
+      announce: chan('announce', '#announcements', 'Exec-posted · read-only', { pinned: 'Bus for Trois-Rivières leaves MB at 05:45 on Jan 9. Not 06:45.' }),
+      team: chan('team', '#marketing', 'Marketing · 5 members', { pinned: 'Rehearsal room MB 3.210 is ours 09:00–12:00 all week.' }),
+      coach: chan('coach', 'Dominique Lavoie', 'Coach · Marketing', { pinned: 'Send me your deck by Friday noon if you want written notes.' }),
+      travel: chan('travel', 'Trois-Rivières logistics', 'Group chat · 7 members', { pinned: 'Hotel check-in is 15:00. Bring ID.' })
+    };
+    const openChan = (k) => () => this.setState(st => ({ channel: k, screen: 'channel', stack: [...st.stack, st.screen] }));
+    const channelGroups = [
+      { label: 'ANNOUNCEMENTS', items: [{ name: '#announcements', preview: 'Bus leaves MB at 05:45 on Jan 9', unread: true, count: '1', weight: '700', bg: 'rgba(104,0,9,.05)', onOpen: openChan('announce') }] },
+      { label: 'TEAM', items: [{ name: '#marketing', preview: 'Dominique: Rehearse the first two minutes twice.', unread: true, count: '4', weight: '700', bg: '#fff', onOpen: openChan('team') }] },
+      { label: 'DIRECT MESSAGES', items: [{ name: 'Dominique Lavoie', preview: 'Your Q&A held up much better this round.', unread: false, count: '', weight: '600', bg: '#fff', onOpen: openChan('coach') }] },
+      { label: 'GROUP CHATS', items: [{ name: 'Trois-Rivières logistics', preview: 'Marc: I have two seats left in the car.', unread: false, count: '', weight: '600', bg: '#fff', onOpen: openChan('travel') }] }
+    ];
+    const activeChan = CHANNELS[s.channel] || CHANNELS.team;
+    const isAnnounce = activeChan.key === 'announce';
+
+    const notes = [
+      { author: 'Dominique Lavoie', date: 'Nov 2', context: 'Practice case #6 · Marketing', body: 'Your recommendation was the strongest in the room, but you buried it on slide 9. Lead with it, then defend it. Q&A held up much better than last round.', hasRubric: true, rubric: ['Content 4', 'Delivery 3', 'Q&A 4', 'Teamwork 5'] },
+      { author: 'Self-reflection', date: 'Oct 26', context: 'Practice case #5', body: 'Spent too long on the market sizing and rushed the financials. Next time cap the research at 40 minutes.', hasRubric: false, rubric: [] }
+    ];
+    const coachDelegates = [
+      { name: 'Sofia Beauchamp', meta: 'Marketing · Marketing · 4 notes', flag: false },
+      { name: 'Marc Ouellette', meta: 'Marketing · 2 notes', flag: false },
+      { name: 'Priya Ramanathan', meta: 'Marketing · 1 note', flag: false },
+      { name: 'Youssef Haddad', meta: 'Marketing · no notes', flag: true },
+      { name: 'Émilie Fortin', meta: 'MIS · no notes', flag: true },
+      { name: 'Daniel Nguyen', meta: 'Strategy · 3 notes', flag: false }
+    ];
+
+    const tabDefs = [
+      { key: 'home', label: t.home, iconRadius: '5px', badge: false, count: '' },
+      { key: 'calendar', label: t.calendar, iconRadius: '5px', badge: false, count: '' },
+      { key: 'cases', label: t.cases, iconRadius: '5px', badge: false, count: '' },
+      { key: 'messages', label: t.messages, iconRadius: '5px', badge: true, count: '5' },
+      { key: 'more', label: t.more, iconRadius: '5px', badge: false, count: '' }
+    ];
+    const activeTab = s.screen === 'channel' ? 'messages' : ['tasks', 'documents', 'feedback', 'cabinet'].includes(s.screen) ? 'more' : s.screen;
+    const tabs = tabDefs.map(td => ({
+      label: td.label, iconRadius: td.iconRadius, badge: td.badge, count: td.count,
+      color: activeTab === td.key ? '#fabb20' : 'rgba(247,243,236,.62)',
+      iconFill: activeTab === td.key ? '#fabb20' : 'transparent',
+      onGo: () => this.tabGo(td.key)
+    }));
+
+    const moreItems = [
+      { label: t.tasks, onGo: () => this.go('tasks') },
+      { label: t.documents, onGo: () => this.go('documents') },
+      { label: t.feedback, onGo: () => this.go('feedback') },
+      { label: t.cabinet, onGo: () => this.go('cabinet') },
+      { label: 'Profile & settings', onGo: () => {} },
+      { label: isExecLike ? 'Admin console' : 'Help & contact', onGo: () => {} }
+    ];
+
+    const roleOptions = [
+      { key: 'delegate', label: 'Delegate' }, { key: 'coach', label: 'Coach' },
+      { key: 'exec', label: 'Executive' }, { key: 'super', label: 'Superuser' }
+    ].map(r => ({ label: r.label, ...pick(role === r.key), onPick: () => this.setState({ role: r.key, screen: 'home', stack: [], sheet: null }) }));
+
+    const vaultOptions = [
+      { key: 'sealed', label: '1 · Sealed' }, { key: 'open', label: '2 · Open' },
+      { key: 'submission', label: '3 · Submission window' }, { key: 'submitted', label: '4 · Submitted' },
+      { key: 'closed', label: '5 · Closed / archived' }
+    ].map(v => ({ label: v.label, ...pick(s.vault === v.key), onPick: () => this.setState({ vault: v.key, screen: 'cases', stack: [] }) }));
+
+    const cabOptions = [
+      { key: 'one', label: 'First year · 1 of 26' },
+      { key: 'nine', label: 'Second year · 9 of 26' },
+      { key: 'full', label: 'Graduating · 23 of 26' }
+    ].map(c => ({ label: c.label, ...pick(s.cab === c.key), onPick: () => this.setState({ cab: c.key, screen: 'cabinet', stack: ['home'] }) }));
+
+    const noop = () => {};
+
+    return {
+      t, userName: 'Sofia Beauchamp',
+      roleLabel: roleLabels[role], isDelegate, isCoach, isExecLike, isSuper: role === 'super',
+      isMobile, isDesktop: !isMobile,
+      shellCaption: isMobile
+        ? 'JMCC Delegate Portal · installed PWA · standalone'
+        : 'JMCC Delegate Portal · desktop · secondary layout',
+      colMax: isMobile ? '410px' : '1080px',
+      frameW: isMobile ? '410px' : '100%',
+      frameH: isMobile ? '864px' : '820px',
+      frameRadius: isMobile ? '52px' : '16px',
+      framePad: isMobile ? '10px' : '8px',
+      innerRadius: isMobile ? '43px' : '10px',
+      contentMaxW: isMobile ? 'none' : '760px',
+      sidebarItems: [
+        { key: 'home', label: 'Home', iconRadius: '4px' },
+        { key: 'calendar', label: 'Calendar', iconRadius: '4px' },
+        { key: 'cases', label: 'Cases', iconRadius: '4px' },
+        { key: 'tasks', label: 'Tasks', iconRadius: '4px' },
+        { key: 'messages', label: 'Messages', iconRadius: '4px', badge: true, count: '5' },
+        { key: 'documents', label: 'Documents', iconRadius: '4px' },
+        { key: 'feedback', label: 'Feedback', iconRadius: '4px' },
+        { key: 'cabinet', label: 'My Cabinet', iconRadius: '4px' }
+      ].concat(isExecLike ? [{ key: 'admin', label: 'Admin', iconRadius: '4px' }] : []).map(it => {
+        const on = (s.screen === 'channel' ? 'messages' : s.screen) === it.key;
+        return {
+          label: it.label, iconRadius: it.iconRadius, badge: !!it.badge, count: it.count || '',
+          color: on ? '#fabb20' : 'rgba(247,243,236,.72)',
+          iconFill: on ? '#fabb20' : 'transparent',
+          bg: on ? 'rgba(250,187,32,.12)' : 'transparent',
+          onGo: () => this.tabGo(it.key)
+        };
+      }),
+      deviceOptions: [
+        { key: 'mobile', label: 'Mobile' }, { key: 'desktop', label: 'Desktop' }
+      ].map(d => ({ label: d.label, ...pick(s.device === d.key), onPick: () => this.setState({ device: d.key }) })),
+      greeting: 'Good morning, Sofia',
+      execGreeting: role === 'super' ? 'Good morning, Christopher' : 'Good morning, Noémie',
+      execSub: role === 'super' ? 'VP Technology & Innovation · full access' : 'Executive · JMCC 2026–2027',
+      cd: this.cdOf(this.release), workCd: this.cdOf(this.workEnd), subCd: this.cdOf(this.subEnd),
+      offline: s.offline, netGlyph: s.offline ? 'no signal' : '••••',
+      promo: s.promo,
+
+      isHome: s.screen === 'home', isCalendar: s.screen === 'calendar', isCases: s.screen === 'cases',
+      isMessages: s.screen === 'messages', isChannel: s.screen === 'channel', isMore: s.screen === 'more',
+      isTasks: s.screen === 'tasks', isDocs: s.screen === 'documents', isFeedback: s.screen === 'feedback',
+      isCabinet: s.screen === 'cabinet',
+      isDelegateDocs: s.screen === 'documents' && !isExecLike,
+      isExecDocs: s.screen === 'documents' && isExecLike,
+
+      vaultSealed: s.vault === 'sealed', vaultOpen: s.vault === 'open',
+      vaultSubmission: s.vault === 'submission', vaultSubmitted: s.vault === 'submitted',
+      vaultClosed: s.vault === 'closed', execCaseTools: isExecLike,
+      materials: [
+        { ext: 'PDF', name: 'Case — Boréal Coffee Roasters', meta: '18 pages · 4.2 MB' },
+        { ext: 'XLSX', name: 'Exhibits 1–6 · financials', meta: '340 KB' },
+        { ext: 'CSV', name: 'Customer survey data', meta: '1.1 MB' },
+        { ext: 'PDF', name: 'Judging rubric', meta: '2 pages' }
+      ],
+      versions: [
+        { file: 'marketing_final_v3.pptx', who: 'Marc Ouellette', when: '2 min ago', latest: true },
+        { file: 'marketing_final_v2.pptx', who: 'Sofia Beauchamp', when: '41 min ago', latest: false },
+        { file: 'marketing_draft.pptx', who: 'Priya Ramanathan', when: '2h 14m ago', latest: false }
+      ],
+      pastCases: [
+        { name: 'JDCC 2025', meta: 'Nov 2025 · Marketing · 2nd of 18' },
+        { name: 'MTBI 2026', meta: 'Feb 2026 · Strategy · 3rd of 14' },
+        { name: 'Practice case #6 — pricing', meta: 'Nov 2025 · Marketing' }
+      ],
+
+      cab: {
+        name: cabData.name, seasons: cabData.seasons,
+        progress: cabData.earned.length + ' of 26 pieces earned',
+        nudge: !!cabData.nudgeText, nudgeText: cabData.nudgeText
+      },
+      shelves,
+      piece: {
+        name: piece.name,
+        rows: [
+          { k: 'Awarded', v: piece.meta[0] }, { k: 'Competition', v: piece.meta[1] },
+          { k: 'Discipline', v: piece.meta[2] }, { k: 'Coach', v: 'Dominique Lavoie' }
+        ]
+      },
+      copyLabel: s.copied ? 'Copied to clipboard' : 'Copy as résumé line',
+      copyResume: () => this.setState({ copied: true }),
+
+      calViews, calChips, agenda, ev,
+      docs, docCols: ['WAIVER', 'MEDIA', 'PARTIC.', 'CONDUCT', 'TRAVEL'], matrix,
+      taskGroups, channelGroups, notes, coachDelegates,
+      coachTeams: [
+        { name: 'Marketing', discipline: 'JDCC', members: 4, next: 'Practice case, today 09:00', unread: true, unreadLabel: '2 threads' },
+        { name: 'Strategy', discipline: 'MTBI', members: 4, next: 'Case release Feb 7, 08:00', unread: false, unreadLabel: '' },
+        { name: 'MIS', discipline: 'JDCC', members: 3, next: 'Feedback due before Jan 9', unread: true, unreadLabel: '1 thread' }
+      ],
+
+      chanName: activeChan.name, chanSub: activeChan.sub, chanPinned: activeChan.pinned,
+      chanMsgs: isAnnounce ? [
+        { who: 'JMCC Executive', initials: 'JM', when: 'Nov 3', body: 'Roster for JDCC locks Friday at noon. After that, substitutions go through your coach only.' },
+        { who: 'JMCC Executive', initials: 'JM', when: 'Nov 1', body: 'Travel authorization forms are live in Documents. No signed form, no bus seat.' }
+      ] : s.msgs,
+      chanHeaderBg: isAnnounce ? '#680009' : '#f7f3ec',
+      chanHeaderFg: isAnnounce ? '#f7f3ec' : '#680009',
+      chanHeaderSub: isAnnounce ? 'rgba(247,243,236,.62)' : '#5e5c5a',
+      chanComposer: !isAnnounce, chanReadOnly: isAnnounce,
+      draft: s.draft,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      sendMsg: () => this.setState(st => st.draft.trim() ? ({
+        msgs: [...st.msgs, { who: 'Sofia Beauchamp', initials: 'SB', when: 'now', body: st.draft.trim() }], draft: ''
+      }) : null),
+
+      tabs, moreItems, roleOptions, vaultOptions, cabOptions,
+      offlineLabel: s.offline ? 'Offline · on' : 'Offline · off',
+      offlineBg: s.offline ? '#680009' : '#fff',
+      offlineColor: s.offline ? '#f7f3ec' : '#680009',
+      toggleOffline: () => this.setState(st => ({ offline: !st.offline })),
+      cycleRole: () => this.setState(st => {
+        const order = ['delegate', 'coach', 'exec', 'super'];
+        return { role: order[(order.indexOf(st.role) + 1) % 4], screen: 'home', stack: [], sheet: null };
+      }),
+
+      sheetPiece: s.sheet === 'piece', sheetEvent: s.sheet === 'event', sheetSigning: s.sheet === 'signing',
+      sheetDietary: s.sheet === 'dietary', sheetInstall: s.sheet === 'install',
+      closeSheet: () => this.setState({ sheet: null }),
+      openInstall: () => this.setState({ sheet: 'install' }),
+      openDietary: () => this.setState({ sheet: 'dietary' }),
+      openSigning: () => this.setState({ sheet: 'signing' }),
+      completeSigning: () => this.setState({ sheet: null }),
+      openEventPractice: evBtn('practice'), openEventSocial: evBtn('social'),
+      dismissPromo: () => this.setState({ promo: false }),
+      uploadVersion: () => this.setState({ vault: 'submitted' }),
+      goCases: () => this.tabGo('cases'), goCalendar: () => this.tabGo('calendar'),
+      goMessages: () => this.tabGo('messages'), goDocs: () => this.go('documents'),
+      goFeedback: () => this.go('feedback'), back: this.back, noop
+    };
+  }
+}
+</script>
+</body>
+</html>

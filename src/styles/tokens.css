@@ -1,0 +1,185 @@
+/* ABOUTME: Tailwind 4 theme tokens for the delegate portal — colors, type scale, radii, motion, safe areas. */
+/* ABOUTME: The only place a hex value may appear. Components use token utilities, never raw color or size. */
+
+/* Self-hosted via @fontsource — same as the main site. No external font CDN.
+   The prototype loads Google Fonts from a <link>; that is deliberately not carried over. */
+@import "@fontsource/unbounded/600.css";
+@import "@fontsource/unbounded/700.css";
+@import "@fontsource/montserrat/400.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
+
+@import "tailwindcss";
+
+@theme {
+  /* ── Brand palette ────────────────────────────────────────────────────────
+     These seven are inherited verbatim from jmcc-website/src/styles/global.css.
+     They are the shared design system. Never change a value here without
+     changing it there — the portal, the site, and the news dashboard are one
+     product to a delegate. */
+  --color-primary: #680009;
+  --color-cream: #f7f3ec;
+  --color-ink: #000000;
+  --color-border: #95323f;
+  --color-gold: #fabb20;
+  --color-sand: #d8af74;
+  --color-muted: #5e5c5a; /* 6.02:1 on cream, AA */
+
+  /* ── Derived, portal-only ─────────────────────────────────────────────────
+     Extracted from the prototype export (docs/prototype/). Each one is a real
+     design decision the brief never named; see docs/COMPONENT_MAP.md §3 for the
+     raw values each token absorbed. */
+
+  /* Warm near-black. The portal's actual body-text and dark-chrome color — NOT
+     `ink`, which is pure #000 and stays reserved for parity with the main site.
+     15.36:1 on cream. Absorbs the export's #2b1416 warm panel (offline bar). */
+  --color-ink-800: #241a18;
+
+  /* Maroon scale for panels nested on `primary`. The export used eight
+     near-identical shades; these three cover every one of them. */
+  --color-primary-700: #58000a; /* raised surface on maroon */
+  --color-primary-800: #4c0007; /* nested panel, bottom sheets */
+  --color-primary-900: #3a0004; /* deepest — the sealed vault, gold-badge text */
+
+  --color-primary-hover: #8a0710; /* link hover, 8.96:1 on cream */
+
+  /* Semantic states. Kept muted per brief §3 — this is not a trading terminal. */
+  --color-danger: #8a1119; /* 8.73:1 on cream; see COMPONENT_MAP §6 caveat */
+  --color-success: #1f4433; /* deep forest, sits beside maroon; 9.82:1 on cream */
+  /* No `warning` token: the brief specifies gold on a dark chip, which is
+     `bg-primary-900 text-gold`. A fourth red-orange would only muddy danger. */
+
+  /* Metal gradient stops. `gold` and `sand` are the mid stops and stay above. */
+  --color-gold-light: #ffd86b;
+  --color-gold-dark: #b57f0d;
+  --color-sand-light: #ecd0a8;
+  --color-sand-dark: #9d7642;
+
+  /* Cabinet shelf edge — the only decorative one-off, and it exists because a
+     physical shelf needs a warmer lip than the maroon behind it. */
+  --color-shelf: #7d3b1d;
+
+  /* ── Typography ───────────────────────────────────────────────────────────
+     Families match the main site token names exactly. */
+  --font-unbounded: "Unbounded", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+
+  /* Five sizes, per brief §3. The export used 22, from 8px to 30px; every one
+     of them maps into a step below. Nothing is smaller than 11px — the export's
+     8–10.5px tier (49 uses, including the tab-bar labels) is under the iOS
+     minimum legible size and does not survive contact with a real phone.
+     `lead` is 16px specifically so form inputs never trigger iOS Safari's
+     focus-zoom, which fires under 16px. */
+  --text-meta: 0.6875rem; /* 11px — eyebrows, badges, tab labels, timestamps */
+  --text-meta--line-height: 1.4;
+  --text-body: 0.8125rem; /* 13px — default UI text, list rows, dense tables */
+  --text-body--line-height: 1.5;
+  --text-lead: 1rem; /* 16px — reading copy and ALL form inputs */
+  --text-lead--line-height: 1.5;
+  --text-title: 1.25rem; /* 20px — screen and section titles (Unbounded) */
+  --text-title--line-height: 1.2;
+  --text-display: 1.875rem; /* 30px — the vault countdown, and little else */
+  --text-display--line-height: 1.05;
+
+  /* ── Radii ────────────────────────────────────────────────────────────────
+     The export used 13 values between 1px and 22px. Four steps plus
+     `rounded-full` for cabinet discs covers all of them. */
+  --radius-xs: 0.1875rem; /* 3px — pills, progress bars, small chips */
+  --radius-sm: 0.5625rem; /* 9px — buttons, badges, nav items */
+  --radius-md: 0.75rem; /* 12px — cards, panels */
+  --radius-lg: 1.25rem; /* 20px — bottom sheets */
+
+  /* ── Safe areas ───────────────────────────────────────────────────────────
+     The single largest thing the prototype does not have. It fakes standalone
+     mode with a 410px device frame, so nothing in the export accounts for the
+     notch or the home indicator. These land in the shell on day one.
+     Exposed through --spacing-* so `pt-safe-t` / `pb-safe-b` are real utilities. */
+  --spacing-safe-t: env(safe-area-inset-top, 0px);
+  --spacing-safe-r: env(safe-area-inset-right, 0px);
+  --spacing-safe-b: env(safe-area-inset-bottom, 0px);
+  --spacing-safe-l: env(safe-area-inset-left, 0px);
+
+  /* ── Motion ───────────────────────────────────────────────────────────────
+     Durations and easings copied from the main site verbatim. Cohesion comes
+     from shared timing: two products on the same easing feel like one product.
+     Never write a raw ms or cubic-bezier in a component. */
+  --duration-instant: 120ms; /* button press, focus ring */
+  --duration-quick: 180ms; /* hover, small state change */
+  --duration-base: 280ms; /* the default — most transitions, bottom sheets */
+  --duration-slow: 480ms; /* screen reveals, larger movement */
+
+  --transition-duration-instant: var(--duration-instant);
+  --transition-duration-quick: var(--duration-quick);
+  --transition-duration-base: var(--duration-base);
+  --transition-duration-slow: var(--duration-slow);
+
+  /* Portal-only. The seal break is the one moment the brief says to spend
+     boldness on, and it is deliberately longer than --duration-slow. */
+  --duration-seal: 600ms;
+  --duration-pulse: 2000ms; /* offline dot, final-hour timer glow */
+  --transition-duration-seal: var(--duration-seal);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* entrances — default */
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0); /* exits */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1); /* hovers, small states */
+
+  --stagger: 60ms;
+
+  --default-transition-duration: var(--duration-base);
+  --default-transition-timing-function: var(--ease-soft);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-montserrat);
+    font-size: var(--text-body);
+    background-color: var(--color-cream);
+    color: var(--color-ink-800);
+    /* Standalone mode has no browser chrome to absorb the bounce, so the default
+       overscroll reads as a rendering bug. The export sets this on its inner
+       scroll container only, which leaves the document itself bouncing. */
+    overscroll-behavior-y: contain;
+  }
+
+  /* ── Focus ────────────────────────────────────────────────────────────────
+     The export has zero :focus rules across 1,284 lines. Everything in it is a
+     real <button>, so tab order already works — only the visible ring is
+     missing, which makes this a one-rule fix rather than a refactor.
+
+     One variable, rebound by dark surfaces. `primary` is invisible on maroon and
+     `gold` may not sit on cream, so neither can be the single global value. */
+  :root {
+    --focus-ring: var(--color-primary);
+  }
+
+  [data-surface="dark"] {
+    --focus-ring: var(--color-gold);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────────
+   Carried over from the export, which handled this correctly, and widened to the
+   same global guard the main site uses. The seal break becomes a fade, per brief
+   §8 — that is handled in the vault component, not here; this only neutralises
+   duration so nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbars are NOT hidden. The export sets `::-webkit-scrollbar { width:0 }`
+   globally, which is defensible inside a device mockup and an accessibility
+   defect on the desktop exec views — particularly the signing matrix, which is
+   the one surface the brief allows to scroll horizontally. */
