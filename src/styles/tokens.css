@@ -12,6 +12,11 @@
 
 @import "tailwindcss";
 
+/* Brand motion patterns, copied verbatim from the main site. Imported after
+   Tailwind so these unlayered rules sit downstream of the utility layer.
+   One entry point: a layout imports tokens.css and gets the whole brand. */
+@import "./brand.css";
+
 @theme {
   /* ── Brand palette ────────────────────────────────────────────────────────
      These seven are inherited verbatim from jmcc-website/src/styles/global.css.
@@ -108,11 +113,13 @@
   --duration-quick: 180ms; /* hover, small state change */
   --duration-base: 280ms; /* the default — most transitions, bottom sheets */
   --duration-slow: 480ms; /* screen reveals, larger movement */
+  --duration-draw: 600ms; /* claw stroke-draw only — see brand.css */
 
   --transition-duration-instant: var(--duration-instant);
   --transition-duration-quick: var(--duration-quick);
   --transition-duration-base: var(--duration-base);
   --transition-duration-slow: var(--duration-slow);
+  --transition-duration-draw: var(--duration-draw);
 
   /* Portal-only. The seal break is the one moment the brief says to spend
      boldness on, and it is deliberately longer than --duration-slow. */

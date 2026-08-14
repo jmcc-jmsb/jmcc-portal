@@ -14,6 +14,12 @@ becomes. When they conflict, HANDOFF wins on anything touching data or security.
   there is no `tailwind.config.mjs`, and adding one forks the design system.
 - The seven brand tokens are shared with `jmcc-website`. Changing a value here
   means changing it there in the same breath.
+- Brand assets and motion patterns are **imported, never reimplemented**.
+  `src/assets/brand/` and `src/styles/brand.css` are verbatim copies of the main
+  site's. A "close enough" rewrite is how two products stop feeling like one.
+  See `docs/BRAND.md` for what came over and what deliberately did not.
+- The wolf is structural, not decorative — app icon, loading state, empty states,
+  cabinet crest. Not an ornament on every card.
 - `gold` (#fabb20) and `sand` (#d8af74) on dark backgrounds only. Never on cream or white.
 - Five type sizes: `meta` `body` `lead` `title` `display`. Nothing smaller than
   `meta`. Every form input is `lead` (16px) or iOS Safari zooms on focus.

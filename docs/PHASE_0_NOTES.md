@@ -22,7 +22,11 @@ this just makes that the single source.
 
 ## 2. The 26 cabinet pieces cannot be seeded verbatim
 
-This is the one that changes the schema, so it needs a decision before Phase 3.
+> **Resolved — `is_repeatable` approved.** `cabinet_pieces` gets the column, the
+> catalog seeds as ~22 piece types, and the "N of M" line is computed per
+> delegate. Phase 3 builds to this. The rest of this section is the reasoning.
+
+This is the one that changes the schema, so it needed a decision before Phase 3.
 
 **Handoff says:** "Seed this list verbatim into `cabinet_pieces`."
 
@@ -161,4 +165,12 @@ Deliverables complete:
 3. Type scale — `COMPONENT_MAP.md` §5
 4. This document
 
-**Stopping here per HANDOFF §9.** Phase 1 does not start until §2 has an answer.
+Added after the Phase 0 review, on request:
+
+5. `.gitignore`
+6. Brand import — `src/assets/brand/`, `src/lib/claw.ts`, `src/styles/brand.css`,
+   `public/icons/`. Inventory and omissions in `docs/BRAND.md`.
+
+§2 is answered, so Phase 1 is unblocked. Phase 1 scaffolds Astro + Tailwind +
+React, stands up Supabase identity and RLS helpers, and builds the `/app` shell
+with safe areas, the back stack, the EN/FR toggle and focus styles.
