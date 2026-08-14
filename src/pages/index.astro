@@ -1,0 +1,27 @@
+---
+// ABOUTME: Public landing and sign-in. Redirects straight through if a session already exists.
+// ABOUTME: Server-rendered so a signed-in delegate never sees the login form at all.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SignInForm from '../app/components/auth/SignInForm.tsx';
+import { createSessionClient } from '../lib/server/supabase';
+import { PUBLIC_SUPABASE_URL } from 'astro:env/client';
+
+export const prerender = false;
+
+// Where to land after signing in. Only same-origin paths are honoured — an open
+// redirect here would turn a sign-in link into a phishing primitive.
+const requested = Astro.url.searchParams.get('next') ?? '/app';
+const next = requested.startsWith('/') && !requested.startsWith('//') ? requested : '/app';
+
+if (PUBLIC_SUPABASE_URL) {
+  const supabase = createSessionClient(Astro.cookies, Astro.request.headers);
+  const { data } = await supabase.auth.getUser();
+  if (data.user) return Astro.redirect(next);
+}
+---
+
+<BaseLayout title="Sign in · JMCC Delegate Portal">
+  <main class="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10">
+    <SignInForm next={next} client:load />
+  </main>
+</BaseLayout>

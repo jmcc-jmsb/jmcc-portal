@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm run typecheck
+
+      # HANDOFF §3: "Add a CI step that greps the client bundle for the key
+      # prefix and fails on a hit."
+      #
+      # astro:env already makes importing a server secret from client code a
+      # build error, so this is the second line of defence — it catches a key
+      # pasted into a component as a literal, which no type system will see.
+      #
+      # Note what is NOT grepped: a bare `eyJ` would match the anon key too, and
+      # the anon key belongs in the client bundle. The checks below are for
+      # things that never do.
+      - name: Service role key must not reach the client bundle
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+
+          dirs=""
+          for d in dist/client .vercel/output/static dist; do
+            [ -d "$d" ] && dirs="$dirs $d"
+          done
+          if [ -z "$dirs" ]; then
+            echo "No client output found to scan." >&2
+            exit 1
+          fi
+          echo "Scanning:$dirs"
+
+          fail=0
+
+          # Supabase's secret-key prefix. Never valid in a client bundle.
+          if grep -rIl --binary-files=without-match -e 'sb_secret_' $dirs; then
+            echo "::error::Found a Supabase secret key prefix in the client bundle."
+            fail=1
+          fi
+
+          # The env var name itself leaking in means a server module got pulled
+          # into a client chunk.
+          for needle in SUPABASE_SERVICE_ROLE_KEY DOCUSEAL_API_TOKEN DOCUSEAL_WEBHOOK_SECRET VAPID_PRIVATE_KEY; do
+            if grep -rIl --binary-files=without-match -e "$needle" $dirs; then
+              echo "::error::Found $needle referenced in the client bundle."
+              fail=1
+            fi
+          done
+
+          # Exact-value check, when the secret is available to this run.
+          # Forks do not get secrets, so absence is a skip and not a pass.
+          if [ -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
+            if grep -rIlF --binary-files=without-match -e "$SUPABASE_SERVICE_ROLE_KEY" $dirs; then
+              echo "::error::The service role key value is present in the client bundle."
+              fail=1
+            fi
+          else
+            echo "::warning::SUPABASE_SERVICE_ROLE_KEY not available; exact-value scan skipped."
+          fi
+
+          exit $fail
