@@ -1,0 +1,139 @@
+/* ABOUTME: Brand motion patterns copied verbatim from jmcc-website/src/styles/global.css. */
+/* ABOUTME: Same rules, same tokens, same comments — so the portal and the site move identically. */
+
+/* These are imported, not reimplemented. If one of them changes on the main site
+   it changes here in the same commit; a "close enough" reimplementation is how
+   two products stop feeling like one. Provenance and the deliberate omissions
+   are documented in docs/BRAND.md.
+
+   Depends on tokens.css for --duration-*, --ease-*, --stagger and --color-sand.
+
+   Not yet wired: .claw-draw needs an observer to measure each path and write
+   --draw-len (the site does this in src/scripts/motion.ts, a vanilla Astro
+   script that has no React equivalent here yet). Until Phase 1 ports it, the
+   rules below resolve --draw-len to 0, which is no dashing at all — a solid,
+   fully drawn gash. That is the same output the site gives a no-JS or
+   reduced-motion visitor, so the divider is correct today and animated later. */
+
+/* ── Link underline sweep (motion-layer.md §Link underline sweep) ────────────
+   scaleX on a pseudo-element, never an animated border-bottom width — width is a
+   layout property and would reflow the line box on every hover. Hover is gated
+   behind (hover: hover) so touch devices get no stuck underline; focus-visible is
+   not gated, so keyboard users always get the same affordance. */
+.link-sweep {
+  position: relative;
+}
+.link-sweep::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-quick) var(--ease-soft);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .link-sweep:hover::after {
+    transform: scaleX(1);
+  }
+}
+.link-sweep:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ── Scratch stroke-draw (motion-layer.md §Scratch stroke-draw) ──────────────
+   The claw asset is three closed filled outlines, so the draw strokes each
+   perimeter rather than a centreline — on shapes this thin the two read the same.
+   vector-effect keeps the stroke at a constant device width however the SVG is
+   scaled, and pathLength="1" (injected by SectionDivider) makes the dash math
+   resolution-independent.
+
+   This is the one effect that animates something other than transform/opacity.
+   motion-layer.md names stroke-dashoffset explicitly, and it is a paint on a
+   142×96 box — no layout, no compositing cost worth the name. */
+.claw-draw path {
+  fill: none;
+  stroke: currentColor;
+  /* User units, NOT px. The gashes sit inside the asset's own
+     `translate(0,608) scale(0.1,-0.1)` group, so path coordinates run 0–6080 and a
+     stroke of 50 here lands at roughly 2px on screen at the rendered size.
+
+     Deliberately no `vector-effect: non-scaling-stroke`: it resolves dash lengths in
+     device space, so the dash pattern collapses to about a pixel and the gash paints
+     solid however the dashoffset animates — the number moves, the picture does not. */
+  stroke-width: 50;
+  stroke-linecap: round;
+  /* --draw-len is each path's measured length, written by motion.ts. Unset means
+     dasharray 0, which is no dashing at all — a solid, fully drawn gash. That is the
+     no-JS and reduced-motion state, i.e. the static scratch divider the spec asks
+     for in place of an animated one. */
+  stroke-dasharray: var(--draw-len, 0);
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Deliberately untransitioned. motion.ts writes --draw-len after first paint, so
+     this value jumps 0 → ~9450 on load; with a transition here that jump animates
+     and the gashes visibly erase themselves before they ever draw. */
+  html.js .claw-draw path {
+    stroke-dashoffset: var(--draw-len, 0);
+  }
+
+  /* The transition lives on the destination state, so only the draw animates and
+     the initial hide is instant. */
+  html.js .claw-draw.is-revealed path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--duration-draw) var(--ease-out);
+  }
+
+  /* Stagger across the three gashes, left to right. These must sit on the revealed
+     rule too — the `transition` shorthand above resets transition-delay. */
+  html.js .claw-draw.is-revealed path:nth-child(2) {
+    transition-delay: var(--stagger);
+  }
+  html.js .claw-draw.is-revealed path:nth-child(3) {
+    transition-delay: calc(var(--stagger) * 2);
+  }
+}
+
+/* ── Card hover claw flick (motion-layer.md §Card hover — claw flick) ────────
+   Texture, not animation: sand at low opacity, gone in --duration-quick. Hidden
+   behind (hover: hover) so touch devices never get a stuck state, and
+   pointer-events: none so it can't intercept the card's own link. */
+.claw-flick {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.25rem;
+  width: 3rem;
+  height: 4.5rem;
+  color: var(--color-sand);
+  fill: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-0.5rem, 0.5rem, 0);
+  transition:
+    opacity var(--duration-quick) var(--ease-soft),
+    transform var(--duration-quick) var(--ease-soft);
+}
+
+@media (hover: hover) {
+  .group:hover .claw-flick,
+  .group:focus-within .claw-flick {
+    opacity: 0.3;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ── Form validation messages (motion-layer.md §Form states) ─────────────────
+   The error slot already reserves its line height, so showing a message never
+   reflows the form; :empty means the fade needs no JS to drive it. */
+.field-error {
+  opacity: 0;
+  transition: opacity var(--duration-quick) var(--ease-soft);
+}
+.field-error:not(:empty) {
+  opacity: 1;
+}

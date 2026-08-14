@@ -1,0 +1,52 @@
+# build output
+dist/
+.vercel/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# @vite-pwa/astro's dev-mode service worker. Its build output lands in dist/,
+# which is already ignored above — and public/manifest.webmanifest is
+# deliberately NOT ignored, because HANDOFF §3 puts it in the source tree and a
+# swallowed manifest is a bug nobody finds until an install fails on a phone.
+dev-dist/
+
+# Supabase CLI local state. supabase/migrations, seed.sql and config.toml are
+# tracked — everything below is per-machine.
+supabase/.temp/
+supabase/.branches/
+supabase/logs/
+.branches/
+
+# environment variables. The service role key, the DocuSeal API token and the
+# VAPID private key all live in here; none of them may ever reach a commit.
+.env
+.env.*
+!.env.example
+
+# secrets and keys
+*.pem
+*.key
+id_rsa*
+.ssh/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# test + coverage output
+coverage/
+playwright-report/
+test-results/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
