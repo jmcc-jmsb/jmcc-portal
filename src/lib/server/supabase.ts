@@ -1,22 +1,27 @@
-// ABOUTME: Server-side Supabase clients — a session-bound one (anon key, RLS applies) and the admin one.
+// ABOUTME: Server-side Supabase clients — a session-bound one (publishable key, RLS applies) and the admin one.
 // ABOUTME: Never imported by client code; astro:env/server makes that a build error.
+//
+// Naming note: Supabase's current API keys are "publishable" and "secret"; the
+// older names were "anon" and "service_role". They are the same two roles — a
+// key safe to ship to a browser, and a key that bypasses RLS entirely — and
+// these variables track what the dashboard calls them today.
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from 'astro:env/client';
-import { SUPABASE_SERVICE_ROLE_KEY } from 'astro:env/server';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from 'astro:env/client';
+import { SUPABASE_SECRET_KEY } from 'astro:env/server';
 import type { AstroCookies } from 'astro';
 
 /** Lets an endpoint answer "not configured" instead of throwing a stack trace at a fresh checkout. */
-export const isSupabaseConfigured = Boolean(PUBLIC_SUPABASE_URL && PUBLIC_SUPABASE_ANON_KEY);
+export const isSupabaseConfigured = Boolean(PUBLIC_SUPABASE_URL && PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 
 function requirePublicConfig() {
-  if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_ANON_KEY) {
+  if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
     throw new Error(
-      'Supabase is not configured. Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY.',
+      'Supabase is not configured. Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_PUBLISHABLE_KEY.',
     );
   }
-  return { url: PUBLIC_SUPABASE_URL, anon: PUBLIC_SUPABASE_ANON_KEY };
+  return { url: PUBLIC_SUPABASE_URL, publishable: PUBLIC_SUPABASE_PUBLISHABLE_KEY };
 }
 
 /**
@@ -29,9 +34,9 @@ function requirePublicConfig() {
  * webhook), and evaluate permission yourself first.
  */
 export function createSessionClient(cookies: AstroCookies, headers: Headers): SupabaseClient {
-  const { url, anon } = requirePublicConfig();
+  const { url, publishable } = requirePublicConfig();
 
-  return createServerClient(url, anon, {
+  return createServerClient(url, publishable, {
     cookies: {
       // AstroCookies has no getAll(), and its get() only sees cookies Astro has
       // been asked about — so the request header is the reliable source for the
@@ -60,7 +65,7 @@ export function createSessionClient(cookies: AstroCookies, headers: Headers): Su
 }
 
 /**
- * Service role. Bypasses RLS entirely.
+ * The secret key. Bypasses RLS entirely.
  *
  * HANDOFF §3: only src/lib/server/ and src/pages/api/ may hold this. It is not a
  * convenience for "the query was awkward" — every use is a deliberate decision
@@ -68,11 +73,11 @@ export function createSessionClient(cookies: AstroCookies, headers: Headers): Su
  */
 export function createAdminClient(): SupabaseClient {
   const { url } = requirePublicConfig();
-  if (!SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set; refusing to fall back to the anon key.');
+  if (!SUPABASE_SECRET_KEY) {
+    throw new Error('SUPABASE_SECRET_KEY is not set; refusing to fall back to the publishable key.');
   }
 
-  return createClient(url, SUPABASE_SERVICE_ROLE_KEY, {
+  return createClient(url, SUPABASE_SECRET_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

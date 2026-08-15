@@ -39,12 +39,14 @@ jobs:
       # build error, so this is the second line of defence — it catches a key
       # pasted into a component as a literal, which no type system will see.
       #
-      # Note what is NOT grepped: a bare `eyJ` would match the anon key too, and
-      # the anon key belongs in the client bundle. The checks below are for
-      # things that never do.
-      - name: Service role key must not reach the client bundle
+      # The `sb_secret_` prefix below is Supabase's current secret-key format,
+      # which is what makes this check precise: the publishable key starts with
+      # `sb_publishable_` and legitimately ships in the bundle, so there is no
+      # overlap to reason about. (Under the older JWT-shaped keys both began
+      # `eyJ`, and a grep for that would have flagged every honest build.)
+      - name: The secret key must not reach the client bundle
         env:
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: |
           set -euo pipefail
 
@@ -68,7 +70,7 @@ jobs:
 
           # The env var name itself leaking in means a server module got pulled
           # into a client chunk.
-          for needle in SUPABASE_SERVICE_ROLE_KEY DOCUSEAL_API_TOKEN DOCUSEAL_WEBHOOK_SECRET VAPID_PRIVATE_KEY; do
+          for needle in SUPABASE_SECRET_KEY DOCUSEAL_API_TOKEN DOCUSEAL_WEBHOOK_SECRET VAPID_PRIVATE_KEY; do
             if grep -rIl --binary-files=without-match -e "$needle" $dirs; then
               echo "::error::Found $needle referenced in the client bundle."
               fail=1
@@ -77,13 +79,13 @@ jobs:
 
           # Exact-value check, when the secret is available to this run.
           # Forks do not get secrets, so absence is a skip and not a pass.
-          if [ -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
-            if grep -rIlF --binary-files=without-match -e "$SUPABASE_SERVICE_ROLE_KEY" $dirs; then
-              echo "::error::The service role key value is present in the client bundle."
+          if [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+            if grep -rIlF --binary-files=without-match -e "$SUPABASE_SECRET_KEY" $dirs; then
+              echo "::error::The secret key value is present in the client bundle."
               fail=1
             fi
           else
-            echo "::warning::SUPABASE_SERVICE_ROLE_KEY not available; exact-value scan skipped."
+            echo "::warning::SUPABASE_SECRET_KEY not available; exact-value scan skipped."
           fi
 
           exit $fail
