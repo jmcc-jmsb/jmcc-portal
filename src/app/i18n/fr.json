@@ -271,5 +271,21 @@
   "messages.noCandidates": "Personne à ajouter pour l'instant.",
   "messages.create": "Créer le groupe",
   "messages.creating": "Création…",
-  "messages.createFailed": "Le groupe n'a pas pu être créé."
+  "messages.createFailed": "Le groupe n'a pas pu être créé.",
+  "messages.queued": "{n} en attente d'envoi. Ils partiront dès votre retour en ligne.",
+  "pwa.updateReady": "Une nouvelle version est prête.",
+  "pwa.updateNow": "Mettre à jour",
+  "pwa.installTitle": "AJOUTER À VOTRE ÉCRAN D'ACCUEIL",
+  "pwa.installWhy": "Ouverture instantanée, fonctionne hors ligne, et c'est la seule façon de recevoir des notifications sur iPhone.",
+  "pwa.install": "Installer",
+  "pwa.dismiss": "Ignorer",
+  "pwa.iosStep1": "Touchez le bouton Partager dans la barre d'outils Safari.",
+  "pwa.iosStep2": "Faites défiler et choisissez « Sur l'écran d'accueil ».",
+  "pwa.iosStep3": "Touchez Ajouter.",
+  "pwa.pushTitle": "DIFFUSION DES CAS ET CHANGEMENTS D'ÉCHÉANCE",
+  "pwa.pushWhy": "Recevez une notification quand un cas est descellé ou qu'une échéance change. Rien d'autre.",
+  "pwa.pushEnable": "Activer les notifications",
+  "pwa.pushEnabling": "Activation…",
+  "pwa.pushBlocked": "Les notifications sont bloquées pour ce site dans les réglages de votre navigateur.",
+  "pwa.pushFailed": "Cela n'a pas fonctionné. Réessayez."
 }

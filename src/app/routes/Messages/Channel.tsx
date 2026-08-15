@@ -1,6 +1,6 @@
 // ABOUTME: One channel — pinned message, the thread, and the composer (when the caller gets one).
 // ABOUTME: Live over Supabase Realtime; an announcement channel gives delegates acknowledgement instead of a composer.
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocale, useT } from '../../i18n';
 import { byDay, canPost, isSendable, startsRun } from '../../lib/messaging';
@@ -13,6 +13,8 @@ import {
   useChannels,
 } from '../../lib/messagingData';
 import { useIsExecLike, useSession } from '../../lib/session';
+import { enqueue, useOutbox } from '../../lib/outbox';
+import type { QueuedMessage } from '../../lib/outbox';
 import { formatDayLabel, formatTimeOnly } from '../../lib/time';
 
 export default function Channel() {
@@ -32,6 +34,16 @@ export default function Channel() {
 
   const bottom = useRef<HTMLDivElement>(null);
   const channel = channels.find((c) => c.id === id) ?? null;
+
+  /* The offline queue from HANDOFF §8. Flushes on reconnect and when the tab
+     becomes visible; the count below the composer is the "visible pending
+     state" the brief asks for. Only messages queue — a submission that arrived
+     four minutes late would be a missed deadline reported as a success. */
+  const flushSend = useCallback(
+    (queued: QueuedMessage) => sendMessage(queued.channelId, queued.authorId, queued.body),
+    [],
+  );
+  const outbox = useOutbox(flushSend);
 
   // Marking read on open, not on scroll. A channel you opened is a channel you
   // saw; tracking viewport position to decide would make the badge argue with
@@ -56,11 +68,26 @@ export default function Channel() {
     // HANDOFF §8 queues message sends offline in IndexedDB and flushes on
     // reconnect. That belongs with the service worker in Phase 6; until then a
     // send that fails says so rather than pretending.
-    const message = await sendMessage(id, session.user.id, draft);
+    const body = draft;
+    // Cleared first: a composer that keeps the text while the row is already
+    // queued invites sending it twice.
+    setDraft('');
+
+    const failure = navigator.onLine ? await sendMessage(id, session.user.id, body) : 'offline';
     setSending(false);
 
-    if (message) setError(t('messages.sendFailed'));
-    else setDraft('');
+    if (!failure) return;
+
+    try {
+      await enqueue({ id: crypto.randomUUID(), channelId: id, authorId: session.user.id, body });
+      outbox.refresh();
+    } catch {
+      // No IndexedDB (private browsing refuses it outright). Nothing to queue
+      // into, so this falls back to the old behaviour: say so, and give the
+      // text back rather than losing it.
+      setDraft(body);
+      setError(t('messages.sendFailed'));
+    }
   }
 
   if (!channel && !loading) {
@@ -203,6 +230,12 @@ export default function Channel() {
       ) : (
         <p className="border-t border-muted/20 px-4 py-3 text-center text-meta text-muted">
           {t('messages.readOnly')}
+        </p>
+      )}
+
+      {outbox.count > 0 && (
+        <p role="status" className="border-t border-gold/40 bg-gold/15 px-4 py-1.5 text-meta text-ink-800">
+          {t('messages.queued', { n: outbox.count })}
         </p>
       )}
 

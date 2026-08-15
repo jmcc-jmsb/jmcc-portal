@@ -240,3 +240,40 @@ select test_eq((select count(*)::int from message_acks), 1,
   'an executive can see who has acknowledged');
 
 reset role;
+
+
+\echo '── Push subscriptions are per-device and private ──'
+
+set role authenticated;
+select act_as('00000000-0000-0000-0000-0000000000d1');
+
+insert into push_subscriptions (user_id, endpoint, keys)
+values ('00000000-0000-0000-0000-0000000000d1', 'https://push.example/aaa',
+        '{"p256dh":"k","auth":"a"}');
+select test_eq((select count(*)::int from push_subscriptions), 1,
+  'a delegate registers their own device');
+
+do $$
+begin
+  insert into push_subscriptions (user_id, endpoint, keys)
+  values ('00000000-0000-0000-0000-0000000000d2', 'https://push.example/bbb',
+          '{"p256dh":"k","auth":"a"}');
+  raise exception 'FAIL: registered a push subscription under another user';
+exception when insufficient_privilege then
+  raise notice 'ok  a subscription cannot be registered for someone else';
+end
+$$;
+
+-- A subscription is a capability to notify a device. Nobody else needs to know
+-- which devices a delegate carries — not even an executive, since sending runs
+-- on the secret key and does not consult this policy.
+select act_as('00000000-0000-0000-0000-0000000000e1');
+select test_eq((select count(*)::int from push_subscriptions), 0,
+  'an executive cannot enumerate a delegate''s devices');
+
+select act_as('00000000-0000-0000-0000-0000000000d1');
+delete from push_subscriptions where endpoint = 'https://push.example/aaa';
+select test_eq((select count(*)::int from push_subscriptions), 0,
+  'and you can remove your own');
+
+reset role;
