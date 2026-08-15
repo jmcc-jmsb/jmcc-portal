@@ -4,9 +4,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { LocaleProvider, useT } from './i18n';
 import { SessionProvider, useSession } from './lib/session';
 import AppShell from './components/shell/AppShell';
+import Cabinet from './routes/Cabinet';
+import Calendar from './routes/Calendar';
 import Cases from './routes/Cases';
 import Home from './routes/Home';
 import More from './routes/More';
+import Tasks from './routes/Tasks';
 import Screen from './routes/Screen';
 
 /** Matches the `scope` and `start_url` the manifest will declare in Phase 6. */
@@ -55,14 +58,14 @@ function Shell() {
       ) : (
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/calendar" element={<Screen titleKey="nav.calendar" phaseKey="screen.phase3" />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="/cases" element={<Cases />} />
           <Route path="/messages" element={<Screen titleKey="nav.messages" phaseKey="screen.phase5" />} />
           <Route path="/more" element={<More />} />
-          <Route path="/tasks" element={<Screen titleKey="nav.tasks" phaseKey="screen.phase3" />} />
+          <Route path="/tasks" element={<Tasks />} />
           <Route path="/documents" element={<Screen titleKey="nav.documents" phaseKey="screen.phase4" />} />
           <Route path="/feedback" element={<Screen titleKey="nav.feedback" phaseKey="screen.phase4" />} />
-          <Route path="/cabinet" element={<Screen titleKey="nav.cabinet" phaseKey="screen.phase3" />} />
+          <Route path="/cabinet" element={<Cabinet />} />
           <Route path="/profile" element={<Screen titleKey="nav.profile" phaseKey="screen.phase7" />} />
           <Route path="/admin" element={<Screen titleKey="nav.admin" phaseKey="screen.phase7" />} />
           {/* An unknown deep link inside a standalone app has no browser bar to
