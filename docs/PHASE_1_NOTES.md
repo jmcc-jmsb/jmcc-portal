@@ -78,7 +78,7 @@ Worth recording because neither is visible in code review:
 ## What is still needed before sign-in works
 
 1. **Create the Supabase project.** Then `PUBLIC_SUPABASE_URL`,
-   `PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` into `.env`
+   `PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` into `.env`
    (see `.env.example`).
 2. **Apply `supabase/migrations/` and `supabase/seed.sql`.**
 3. **Allow the callback URL** — `{PUBLIC_APP_URL}/auth/callback` — in the

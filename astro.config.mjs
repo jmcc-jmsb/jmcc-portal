@@ -31,11 +31,11 @@ export default defineConfig({
   env: {
     schema: {
       PUBLIC_SUPABASE_URL: envField.string({ context: 'client', access: 'public', optional: true }),
-      PUBLIC_SUPABASE_ANON_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
+      PUBLIC_SUPABASE_PUBLISHABLE_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
       PUBLIC_APP_URL: envField.string({ context: 'client', access: 'public', optional: true }),
       PUBLIC_ENABLE_DEV_CONTROLS: envField.boolean({ context: 'client', access: 'public', default: false }),
 
-      SUPABASE_SERVICE_ROLE_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      SUPABASE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       DOCUSEAL_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
       DOCUSEAL_API_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
       DOCUSEAL_WEBHOOK_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),

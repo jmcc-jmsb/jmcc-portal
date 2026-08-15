@@ -25,7 +25,7 @@ function NotConfiguredBanner() {
       <p className="text-meta leading-relaxed text-ink-800">
         <strong className="font-semibold">Supabase is not configured.</strong> Copy{' '}
         <code>.env.example</code> to <code>.env</code>, set <code>PUBLIC_SUPABASE_URL</code> and{' '}
-        <code>PUBLIC_SUPABASE_ANON_KEY</code>, then restart the dev server. The shell is live — only
+        <code>PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>, then restart the dev server. The shell is live — only
         the data layer is missing.
       </p>
     </div>
