@@ -36,5 +36,9 @@ run() {
 
 run "$ROOT/supabase/tests/00_shim.sql"
 for migration in "$ROOT"/supabase/migrations/*.sql; do run "$migration"; done
+# The cabinet catalog is production data, not fixtures — the tests exercise the
+# real 22 pieces rather than a made-up set that could drift from them.
+run "$ROOT/supabase/seed_cabinet.sql"
 run "$ROOT/supabase/tests/01_fixtures.sql"
 run "$ROOT/supabase/tests/02_embargo.test.sql"
+run "$ROOT/supabase/tests/03_cabinet_tasks_events.test.sql"
