@@ -22,6 +22,16 @@ jobs:
 
       - run: npm run typecheck
 
+      - run: npm test
+
+      # The RLS suite applies every migration to a real Postgres and asserts what
+      # each role can actually reach. It is the check behind the Phase 2
+      # acceptance criterion — "a delegate cannot reach materials before release
+      # via a direct API call" — and it needs no Supabase project: the script
+      # starts and removes its own container, and ubuntu-latest ships Docker.
+      - name: Row-level security
+        run: bash scripts/test-db.sh
+
       # HANDOFF §3: "Add a CI step that greps the client bundle for the key
       # prefix and fails on a hit."
       #

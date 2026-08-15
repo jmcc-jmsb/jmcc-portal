@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { LocaleProvider, useT } from './i18n';
 import { SessionProvider, useSession } from './lib/session';
 import AppShell from './components/shell/AppShell';
+import Cases from './routes/Cases';
 import Home from './routes/Home';
 import More from './routes/More';
 import Screen from './routes/Screen';
@@ -55,7 +56,7 @@ function Shell() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/calendar" element={<Screen titleKey="nav.calendar" phaseKey="screen.phase3" />} />
-          <Route path="/cases" element={<Screen titleKey="nav.cases" phaseKey="screen.phase2" />} />
+          <Route path="/cases" element={<Cases />} />
           <Route path="/messages" element={<Screen titleKey="nav.messages" phaseKey="screen.phase5" />} />
           <Route path="/more" element={<More />} />
           <Route path="/tasks" element={<Screen titleKey="nav.tasks" phaseKey="screen.phase3" />} />

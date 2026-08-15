@@ -7,6 +7,9 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from 'astro:env/client'
 import { SUPABASE_SERVICE_ROLE_KEY } from 'astro:env/server';
 import type { AstroCookies } from 'astro';
 
+/** Lets an endpoint answer "not configured" instead of throwing a stack trace at a fresh checkout. */
+export const isSupabaseConfigured = Boolean(PUBLIC_SUPABASE_URL && PUBLIC_SUPABASE_ANON_KEY);
+
 function requirePublicConfig() {
   if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_ANON_KEY) {
     throw new Error(
