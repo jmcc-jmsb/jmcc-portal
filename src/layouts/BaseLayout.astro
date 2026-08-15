@@ -1,0 +1,49 @@
+---
+// ABOUTME: The single HTML shell — viewport-fit for safe areas, theme colour, icons, tokens.
+// ABOUTME: Both the public landing page and the /app SPA mount inside this.
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Standalone mode paints the maroon chrome edge-to-edge; the landing page does not. */
+  bodyClass?: string;
+}
+
+const { title, description = 'JMCC Delegate Portal', bodyClass = '' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- viewport-fit=cover is what makes env(safe-area-inset-*) resolve to anything
+         other than 0. Without it the tokens in tokens.css are inert and the tab bar
+         sits under the iPhone home indicator — the single most common way a PWA
+         reads as broken. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={description} />
+
+    <title>{title}</title>
+
+    <meta name="theme-color" content="#680009" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+    <!-- Tells iOS to open the installed app without Safari chrome. The manifest
+         covers Android; iOS still reads these.
+         Both spellings on purpose: the apple- prefix is deprecated and warns in
+         Chrome, but iOS versions before 17.4 read only that one, and those are
+         exactly the phones most likely to be in a delegate's pocket. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="JMCC" />
+
+    <!-- Private by definition. Nothing under the portal should ever be indexed. -->
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

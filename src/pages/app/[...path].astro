@@ -1,0 +1,35 @@
+---
+// ABOUTME: Mounts the /app SPA. Every route under /app renders this same shell.
+// ABOUTME: Server-rendered gate only — the session check here keeps signed-out users out of the app entirely.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import App from '../../app/App.tsx';
+import { createSessionClient } from '../../lib/server/supabase';
+import { PUBLIC_SUPABASE_URL } from 'astro:env/client';
+
+// HANDOFF §2: everything under /app is one React root with client-side routing,
+// so the shell caches once and tab switches are instant and offline-capable.
+export const prerender = false;
+
+// The gate is server-side on purpose. A client-side redirect would flash the app
+// shell to a signed-out visitor, and the shell is precached — so the flash would
+// happen offline too. RLS is still the real boundary; this is only about not
+// rendering a workspace to someone who has no session.
+//
+// When Supabase is not configured yet the gate stands down, so a fresh checkout
+// can still see the shell. App.tsx renders a "not configured" state instead.
+if (PUBLIC_SUPABASE_URL) {
+  const supabase = createSessionClient(Astro.cookies, Astro.request.headers);
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) {
+    return Astro.redirect(`/?next=${encodeURIComponent(Astro.url.pathname)}`);
+  }
+}
+---
+
+<BaseLayout title="JMCC Delegate Portal" bodyClass="bg-primary">
+  <!-- client:only — the app shell is a client-side router over browser storage,
+       and server-rendering it would mean a second routing implementation for no
+       gain. The maroon body colour above stands in for the frame before hydration
+       so an install opens on brand, not on a white flash. -->
+  <App client:only="react" />
+</BaseLayout>
