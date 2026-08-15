@@ -2,7 +2,6 @@
   "app.name": "JMCC",
   "app.portal": "Portail des délégués",
   "app.season": "JMCC 2026–2027",
-
   "nav.home": "Accueil",
   "nav.calendar": "Calendrier",
   "nav.cases": "Cas",
@@ -14,7 +13,6 @@
   "nav.cabinet": "Mon palmarès",
   "nav.profile": "Profil",
   "nav.admin": "Administration",
-
   "shell.tabNav": "Sections principales",
   "shell.sideNav": "Toutes les sections",
   "shell.back": "Retour",
@@ -25,13 +23,11 @@
   "shell.offline": "Hors ligne. Vos documents de cas et votre horaire restent accessibles; la soumission et la signature exigent une connexion.",
   "shell.install": "Ajouter JMCC à votre écran d'accueil",
   "shell.skipToContent": "Passer au contenu",
-
   "home.next": "À VENIR",
   "home.needs": "ACTION REQUISE",
   "home.today": "AUJOURD'HUI",
   "home.recent": "RÉCENT",
   "home.greeting": "Bonjour",
-
   "auth.title": "Portail des délégués",
   "auth.lede": "Connectez-vous avec votre courriel Concordia. Nous envoyons un lien — aucun mot de passe à retenir.",
   "auth.email": "Courriel",
@@ -42,24 +38,20 @@
   "auth.sentDetail": "Nous avons envoyé un lien de connexion à {email}. Il expire dans une heure.",
   "auth.error": "Cela n'a pas fonctionné. Vérifiez l'adresse et réessayez.",
   "auth.expired": "Ce lien a expiré ou a déjà été utilisé. Demandez-en un nouveau.",
-
   "role.delegate": "Délégué",
   "role.coach": "Coach",
   "role.executive": "Exécutif",
   "role.superuser": "Superutilisateur",
-
   "dev.label": "DEV",
   "dev.controls": "Contrôles prototype",
   "dev.role": "Rôle",
   "dev.vaultState": "État de la chambre forte",
   "dev.cabinetFill": "Remplissage du palmarès",
   "dev.live": "Réel",
-
   "common.close": "Fermer",
   "common.save": "Enregistrer",
   "common.edit": "Modifier",
   "common.delete": "Supprimer",
-
   "cabinet.progress": "pièces sur {total} obtenues",
   "cabinet.placements": "CLASSEMENTS",
   "cabinet.seasons": "SAISONS",
@@ -76,7 +68,6 @@
   "cabinet.fill.empty": "Vide",
   "cabinet.fill.partial": "Partiel",
   "cabinet.fill.full": "Complet",
-
   "tasks.outstanding": "{n} en cours",
   "tasks.overdue": "EN RETARD",
   "tasks.today": "AUJOURD'HUI",
@@ -95,7 +86,6 @@
   "tasks.delete": "Supprimer {title}",
   "tasks.deleteShort": "Supprimer",
   "tasks.none": "Rien sur votre liste.",
-
   "documents.progress": "{done} documents complétés",
   "documents.none": "Aucun document ne vous a encore été assigné.",
   "documents.untitled": "Document",
@@ -110,7 +100,6 @@
   "documents.delegate": "Délégué",
   "documents.sortOutstanding": "En attente d'abord",
   "documents.exportCsv": "Exporter CSV",
-
   "feedback.empty": "Aucune note pour l'instant. Après votre premier cas pratique, la rétroaction de votre coach apparaîtra ici.",
   "feedback.fromCoach": "De votre coach",
   "feedback.internal": "Interne",
@@ -133,7 +122,6 @@
   "feedback.save": "Enregistrer la note",
   "feedback.coverage": "COUVERTURE",
   "feedback.coverageCount": "{missing} délégués sur {total} n'ont encore aucune note de coaching",
-
   "calendar.month": "Mois",
   "calendar.week": "Semaine",
   "calendar.agenda": "Agenda",
@@ -169,12 +157,10 @@
   "calendar.typeDeadline": "Échéance",
   "calendar.typeSocial": "Social",
   "calendar.typeAdmin": "Administration",
-
   "time.d": "j",
   "time.h": "h",
   "time.m": "min",
   "time.s": "s",
-
   "vault.opensIn": "Ouvre dans",
   "vault.remaining": "Temps restant",
   "vault.sealed": "Scellé",
@@ -227,7 +213,6 @@
   "vault.submitError.signedOut": "Votre session a expiré. Reconnectez-vous et réessayez.",
   "vault.submitError.offline": "Aucune connexion. Les soumissions ne sont jamais mises en file d'attente — réessayez une fois en ligne.",
   "vault.submitError.unknown": "Cela n'a pas fonctionné. Réessayez.",
-
   "schedule.new": "Programmer un cas",
   "schedule.title": "Programmer un cas",
   "schedule.competition": "Compétition",
@@ -254,11 +239,37 @@
   "schedule.saving": "Enregistrement…",
   "schedule.failed": "Le cas n'a pas pu être enregistré.",
   "schedule.uploadFailed": "Le cas a été programmé, mais les documents n'ont pas été téléversés. Ajoutez-les de nouveau.",
-
   "screen.placeholder": "Cet écran arrive dans une phase ultérieure.",
   "screen.phase2": "Phase 2 — la chambre forte.",
   "screen.phase3": "Phase 3 — palmarès, tâches, calendrier.",
   "screen.phase4": "Phase 4 — documents et rétroaction.",
   "screen.phase5": "Phase 5 — messagerie.",
-  "screen.phase7": "Phase 7 — promotions, administration, finitions."
+  "screen.phase7": "Phase 7 — promotions, administration, finitions.",
+  "messages.announcements": "ANNONCES",
+  "messages.competition": "COMPÉTITION",
+  "messages.teams": "ÉQUIPES",
+  "messages.groups": "GROUPES",
+  "messages.direct": "MESSAGES DIRECTS",
+  "messages.none": "Aucun canal pour l'instant.",
+  "messages.empty": "Aucun message pour l'instant.",
+  "messages.untitled": "Conversation",
+  "messages.unread": "{n} non lus",
+  "messages.pinned": "ÉPINGLÉ",
+  "messages.pin": "Épingler",
+  "messages.unpin": "Désépingler",
+  "messages.acknowledge": "Accuser réception",
+  "messages.acknowledged": "Réception confirmée",
+  "messages.placeholder": "Écrire un message",
+  "messages.send": "Envoyer",
+  "messages.sendFailed": "L'envoi a échoué. Vérifiez votre connexion et réessayez.",
+  "messages.readOnly": "Seul l'exécutif publie dans ce canal.",
+  "messages.gone": "Ce canal n'est pas disponible.",
+  "messages.newGroup": "Nouveau groupe",
+  "messages.groupName": "Nom",
+  "messages.groupNamePlaceholder": "Logistique de voyage",
+  "messages.members": "Membres",
+  "messages.noCandidates": "Personne à ajouter pour l'instant.",
+  "messages.create": "Créer le groupe",
+  "messages.creating": "Création…",
+  "messages.createFailed": "Le groupe n'a pas pu être créé."
 }

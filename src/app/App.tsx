@@ -10,6 +10,8 @@ import Cases from './routes/Cases';
 import Documents from './routes/Documents';
 import Feedback from './routes/Feedback';
 import Home from './routes/Home';
+import Messages from './routes/Messages';
+import Channel from './routes/Messages/Channel';
 import More from './routes/More';
 import Tasks from './routes/Tasks';
 import Screen from './routes/Screen';
@@ -62,7 +64,8 @@ function Shell() {
           <Route path="/" element={<Home />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/cases" element={<Cases />} />
-          <Route path="/messages" element={<Screen titleKey="nav.messages" phaseKey="screen.phase5" />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/:id" element={<Channel />} />
           <Route path="/more" element={<More />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/documents" element={<Documents />} />
