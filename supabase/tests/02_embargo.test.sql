@@ -239,6 +239,48 @@ select test_eq((select count(*)::int from user_roles
   'a superuser can');
 
 
+\echo '── Profile privacy: a teammate knows your name, not your allergies ──'
+
+reset role;
+update profiles
+   set allergies = 'peanuts, severe',
+       emergency_contact_phone = '555-0199',
+       accessibility_needs = 'needs step-free access'
+ where id = '00000000-0000-0000-0000-0000000000d2';
+set role authenticated;
+
+-- Dana and Drew are on Finance A together. Dana is not a coach and not an exec.
+select act_as('00000000-0000-0000-0000-0000000000d1');
+select test_eq(
+  (select count(*)::int from profiles where id = '00000000-0000-0000-0000-0000000000d2'),
+  0,
+  'a teammate cannot read another delegate''s profile row');
+
+select test_eq(
+  (select display_name from visible_profile_names(array['00000000-0000-0000-0000-0000000000d2'::uuid])),
+  'Drew Alpha',
+  'but can still resolve their name, which is all a roster needed');
+
+select act_as('00000000-0000-0000-0000-0000000000d3');   -- Blair, another team
+select test_eq(
+  (select count(*)::int from visible_profile_names(array['00000000-0000-0000-0000-0000000000d2'::uuid])),
+  0,
+  'someone on another team resolves no name at all');
+
+-- Kept deliberately: a coach books the meals and travels with the team.
+select act_as('00000000-0000-0000-0000-0000000000c1');
+select test_eq(
+  (select allergies from profiles where id = '00000000-0000-0000-0000-0000000000d2'),
+  'peanuts, severe',
+  'a coach still sees their own delegates'' dietary and accessibility needs');
+
+select act_as('00000000-0000-0000-0000-0000000000d2');
+select test_eq(
+  (select allergies from profiles where id = '00000000-0000-0000-0000-0000000000d2'),
+  'peanuts, severe',
+  'and you can always read your own');
+
+
 \echo '── RLS is on everywhere (HANDOFF §10, first item) ──'
 
 reset role;
