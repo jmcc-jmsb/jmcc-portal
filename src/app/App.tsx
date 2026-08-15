@@ -7,6 +7,8 @@ import AppShell from './components/shell/AppShell';
 import Cabinet from './routes/Cabinet';
 import Calendar from './routes/Calendar';
 import Cases from './routes/Cases';
+import Documents from './routes/Documents';
+import Feedback from './routes/Feedback';
 import Home from './routes/Home';
 import More from './routes/More';
 import Tasks from './routes/Tasks';
@@ -63,8 +65,8 @@ function Shell() {
           <Route path="/messages" element={<Screen titleKey="nav.messages" phaseKey="screen.phase5" />} />
           <Route path="/more" element={<More />} />
           <Route path="/tasks" element={<Tasks />} />
-          <Route path="/documents" element={<Screen titleKey="nav.documents" phaseKey="screen.phase4" />} />
-          <Route path="/feedback" element={<Screen titleKey="nav.feedback" phaseKey="screen.phase4" />} />
+          <Route path="/documents" element={<Documents />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="/cabinet" element={<Cabinet />} />
           <Route path="/profile" element={<Screen titleKey="nav.profile" phaseKey="screen.phase7" />} />
           <Route path="/admin" element={<Screen titleKey="nav.admin" phaseKey="screen.phase7" />} />
