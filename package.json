@@ -11,6 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
+    "test": "vitest run",
+    "test:db": "bash scripts/test-db.sh",
     "astro": "astro"
   },
   "dependencies": {
@@ -30,5 +32,8 @@
     "react-router": "^8.3.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
   }
 }
