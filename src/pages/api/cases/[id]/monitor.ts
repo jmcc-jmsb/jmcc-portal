@@ -41,18 +41,16 @@ export const GET: APIRoute = async (ctx) => {
 
   const submissions = (submissionsResult.data as SubmissionRow[] | null) ?? [];
 
-  // Names in a second query rather than an embedded join: the join syntax needs
-  // the foreign key to be named exactly right and fails at runtime when it is
-  // not, and this is one round trip either way.
+  /* Names come from visible_profile_names() rather than from `profiles`
+     directly. A teammate is entitled to know who submitted; they are not
+     entitled to that person's allergies or emergency contact, which is what
+     selecting the whole row used to hand over. See migration 0004. */
   const submitterIds = [...new Set(submissions.map((s) => s.submitted_by))];
   const names = new Map<string, string>();
   if (submitterIds.length > 0) {
-    const { data } = await caller.supabase
-      .from('profiles')
-      .select('id, preferred_name, full_name')
-      .in('id', submitterIds);
-    for (const p of (data as { id: string; preferred_name: string | null; full_name: string }[] | null) ?? []) {
-      names.set(p.id, p.preferred_name ?? p.full_name);
+    const { data } = await caller.supabase.rpc('visible_profile_names', { ids: submitterIds });
+    for (const p of (data as { id: string; display_name: string }[] | null) ?? []) {
+      names.set(p.id, p.display_name);
     }
   }
 
