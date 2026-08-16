@@ -271,5 +271,21 @@
   "messages.noCandidates": "Nobody to add yet.",
   "messages.create": "Create group",
   "messages.creating": "Creating…",
-  "messages.createFailed": "The group could not be created."
+  "messages.createFailed": "The group could not be created.",
+  "messages.queued": "{n} waiting to send. They will go out when you are back online.",
+  "pwa.updateReady": "A new version is ready.",
+  "pwa.updateNow": "Update",
+  "pwa.installTitle": "ADD TO YOUR HOME SCREEN",
+  "pwa.installWhy": "Opens instantly, works offline, and is the only way to get notifications on an iPhone.",
+  "pwa.install": "Install",
+  "pwa.dismiss": "Dismiss",
+  "pwa.iosStep1": "Tap the Share button in the Safari toolbar.",
+  "pwa.iosStep2": "Scroll down and choose Add to Home Screen.",
+  "pwa.iosStep3": "Tap Add.",
+  "pwa.pushTitle": "CASE RELEASES AND DEADLINE CHANGES",
+  "pwa.pushWhy": "Get a notification when a case unseals or a deadline moves. Nothing else.",
+  "pwa.pushEnable": "Turn on notifications",
+  "pwa.pushEnabling": "Turning on…",
+  "pwa.pushBlocked": "Notifications are blocked in your browser settings for this site.",
+  "pwa.pushFailed": "That did not work. Try again."
 }

@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import { useT } from '../i18n';
 import { MORE_ITEMS, NAV_ITEMS, visibleTo } from '../lib/nav';
 import { useSession } from '../lib/session';
+import InstallSheet from '../components/pwa/InstallSheet';
+import PushOptIn from '../components/pwa/PushOptIn';
 
 export default function More() {
   const t = useT();
@@ -16,6 +18,16 @@ export default function More() {
   return (
     <div className="px-4 py-5">
       <h1 className="font-unbounded text-title font-bold text-primary">{t('nav.more')}</h1>
+
+      {/* Install and notifications live here rather than on Home. Reaching More
+          is itself the "meaningful completion" §8 asks for: someone who has gone
+          looking through the drawer is oriented enough to be offered an install,
+          which a first-load banner never is. The negative margin undoes the
+          sheets' own gutter so they line up with the list below. */}
+      <div className="-mx-4">
+        <InstallSheet earned />
+        <PushOptIn />
+      </div>
 
       <ul className="mt-4 overflow-hidden rounded-md border border-muted/20 bg-white">
         {items.map((item) => (

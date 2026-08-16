@@ -31,9 +31,11 @@
     "react-dom": "^19.2.8",
     "react-router": "^8.3.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
+    "@types/web-push": "^3.6.4",
     "vitest": "^4.1.10"
   }
 }

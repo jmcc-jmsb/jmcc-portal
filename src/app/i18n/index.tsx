@@ -54,6 +54,14 @@ export function LocaleProvider({ children, initial }: { children: ReactNode; ini
   // Keeps `lang` honest for screen readers and for CSS that hangs off :lang().
   useEffect(() => {
     document.documentElement.lang = locale;
+
+    // And points the manifest at the matching one, so a French delegate installs
+    // an app whose name is in French. Read at install time, so it has to be
+    // correct before the Add to Home Screen tap, not after.
+    const manifest = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
+    if (manifest) {
+      manifest.href = locale === 'fr' ? '/manifest.fr.webmanifest' : '/manifest.webmanifest';
+    }
   }, [locale]);
 
   const setLocale = useCallback((next: Locale) => {

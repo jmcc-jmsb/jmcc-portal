@@ -27,6 +27,10 @@ const { title, description = 'JMCC Delegate Portal', bodyClass = '' } = Astro.pr
     <title>{title}</title>
 
     <meta name="theme-color" content="#680009" />
+    <!-- The manifest is swapped to the French one by LocaleProvider when the
+         app is in French; a manifest is read at install time, so the link has to
+         be right before the user taps Add to Home Screen, not after. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 

@@ -39,7 +39,12 @@ export default defineConfig({
       DOCUSEAL_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
       DOCUSEAL_API_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
       DOCUSEAL_WEBHOOK_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Public by nature — every subscribing browser receives it — but kept a
+      // server variable so the deployment has one VAPID_* convention. Served to
+      // the client by /api/push/key.
+      VAPID_PUBLIC_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       VAPID_PRIVATE_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      VAPID_SUBJECT: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
 

@@ -7,6 +7,7 @@ import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 import TabBar from './TabBar';
 import OfflineBar from './OfflineBar';
+import UpdatePrompt from '../pwa/UpdatePrompt';
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const t = useT();
@@ -28,6 +29,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
         <TopBar />
         <OfflineBar />
+        {/* Above the scroll area, so an available update is visible without
+            scrolling and never covers the content it is offering to replace. */}
+        <UpdatePrompt />
 
         <main
           id="main"
