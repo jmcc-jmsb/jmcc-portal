@@ -11,7 +11,7 @@
    emit them, and it is legible to whoever has to change one.
 
    Bump SW_VERSION to retire every cache below at once. */
-const SW_VERSION = 'v1';
+const SW_VERSION = 'v2';
 
 const SHELL_CACHE = `shell-${SW_VERSION}`;
 const FONT_CACHE = `fonts-${SW_VERSION}`;
@@ -83,10 +83,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Hashed build output is immutable by construction — the filename changes when
-  // the contents do, so it can be cached forever without a revalidation.
-  if (url.pathname.startsWith('/_astro/') || /\.(js|css)$/.test(url.pathname)) {
+  /* Content-hashed build output only. The filename changes when the contents do,
+     so this can be cached forever without revalidating.
+
+     Deliberately NOT every .js and .css: that rule pinned any script whose URL
+     happens to end in .js, including the dev server's own modules, and served a
+     stale copy after a rebuild — half the app loading new code against an old
+     React, which presents as "Invalid hook call". Anything outside /_astro/ is
+     not guaranteed to change name when it changes, so it goes network-first
+     below and is merely available offline rather than frozen. */
+  if (url.pathname.startsWith('/_astro/')) {
     event.respondWith(cacheFirst(request, SHELL_CACHE));
+    return;
+  }
+
+  if (/\.(js|css)$/.test(url.pathname)) {
+    event.respondWith(networkFirst(request, SHELL_CACHE));
     return;
   }
 

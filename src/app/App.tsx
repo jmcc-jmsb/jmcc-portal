@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { LocaleProvider, useT } from './i18n';
 import { SessionProvider, useSession } from './lib/session';
 import AppShell from './components/shell/AppShell';
+import Admin from './routes/Admin';
 import Cabinet from './routes/Cabinet';
 import Calendar from './routes/Calendar';
 import Cases from './routes/Cases';
@@ -72,7 +73,7 @@ function Shell() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/cabinet" element={<Cabinet />} />
           <Route path="/profile" element={<Screen titleKey="nav.profile" phaseKey="screen.phase7" />} />
-          <Route path="/admin" element={<Screen titleKey="nav.admin" phaseKey="screen.phase7" />} />
+          <Route path="/admin" element={<Admin />} />
           {/* An unknown deep link inside a standalone app has no browser bar to
               correct it, so it goes home rather than showing a dead end. */}
           <Route path="*" element={<Navigate to="/" replace />} />
