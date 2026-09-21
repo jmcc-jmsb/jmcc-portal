@@ -321,5 +321,18 @@
   "award.granting": "Attribution…",
   "award.granted": "{n} attribuée(s).",
   "award.failed": "Cette attribution a été refusée.",
-  "award.noPieces": "Aucune pièce à attribuer."
+  "award.noPieces": "Aucune pièce à attribuer.",
+  "admin.teams": "Équipes",
+  "teams.team": "Équipe",
+  "teams.chooseTeam": "Choisir une équipe",
+  "teams.noTeams": "Aucune équipe. Les équipes proviennent des données de saison ou de l’import CSV.",
+  "teams.members": "Membres",
+  "teams.coaches": "Coachs",
+  "teams.coachHelp": "Seules les personnes ayant un rôle de coach sont listées. Un coach d’équipe voit les besoins alimentaires et d’accessibilité de ses délégués.",
+  "teams.save": "Enregistrer",
+  "teams.saving": "Enregistrement…",
+  "teams.saved": "Enregistré : {added} ajouté(s), {removed} retiré(s).",
+  "teams.unchanged": "Rien à enregistrer.",
+  "teams.failed": "Cette modification a été refusée.",
+  "teams.notCoach": "Une personne de la liste des coachs n’a pas de rôle de coach."
 }
