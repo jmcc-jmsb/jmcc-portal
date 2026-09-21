@@ -306,5 +306,20 @@
   "admin.unknownActor": "Someone no longer in the portal",
   "admin.system": "System",
   "promo.eyebrow": "JMCC",
-  "promo.dismiss": "Dismiss this"
+  "promo.dismiss": "Dismiss this",
+  "admin.awards": "Awards",
+  "picker.search": "Search by name",
+  "picker.selectedCount": "{n} selected",
+  "picker.none": "Nobody matches that.",
+  "picker.loading": "Loading people…",
+  "picker.remove": "Remove {name}",
+  "award.piece": "Piece",
+  "award.choosePiece": "Choose a piece",
+  "award.recipients": "Recipients",
+  "award.note": "Note (optional)",
+  "award.grant": "Grant to {n}",
+  "award.granting": "Granting…",
+  "award.granted": "{n} granted.",
+  "award.failed": "That grant was refused.",
+  "award.noPieces": "No pieces to grant."
 }

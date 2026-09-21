@@ -306,5 +306,20 @@
   "admin.unknownActor": "Une personne qui n'est plus au portail",
   "admin.system": "Système",
   "promo.eyebrow": "JMCC",
-  "promo.dismiss": "Ignorer"
+  "promo.dismiss": "Ignorer",
+  "admin.awards": "Distinctions",
+  "picker.search": "Rechercher par nom",
+  "picker.selectedCount": "{n} sélectionné(e)s",
+  "picker.none": "Personne ne correspond.",
+  "picker.loading": "Chargement des personnes…",
+  "picker.remove": "Retirer {name}",
+  "award.piece": "Pièce",
+  "award.choosePiece": "Choisir une pièce",
+  "award.recipients": "Récipiendaires",
+  "award.note": "Note (facultatif)",
+  "award.grant": "Attribuer à {n}",
+  "award.granting": "Attribution…",
+  "award.granted": "{n} attribuée(s).",
+  "award.failed": "Cette attribution a été refusée.",
+  "award.noPieces": "Aucune pièce à attribuer."
 }
