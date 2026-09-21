@@ -536,17 +536,37 @@ The API token lives only in `src/lib/server/docuseal.ts`, from env, never in a c
 
 ## 10. Security checklist — before any real delegate data
 
-- [ ] RLS enabled on every table, confirmed via `pg_tables`
-- [ ] A delegate JWT cannot select `case_materials` before `release_at` — tested with a raw API call
-- [ ] A delegate cannot select internal `feedback_notes`, and the UI leaks no count or gap
-- [ ] An executive cannot insert into `user_roles`
-- [ ] Service role key absent from the client bundle (CI check)
-- [ ] DocuSeal webhook rejects a bad or missing secret
-- [ ] Submission endpoint rejects a client-supplied timestamp
-- [ ] Signed URLs expire in ≤15 minutes
-- [ ] A user cannot read another user's `cabinet_awards` unless exec or their coach
-- [ ] Materials, submissions, and signed-document buckets are private
-- [ ] Dietary/allergy data deletion after competition end is implemented if the copy promises it
+- [x] RLS enabled on every table, confirmed via `pg_tables` — `02_embargo` and `06_promos` both assert `count(*) = 0` over `pg_tables where not rowsecurity`; 26/26 tables carry an explicit `enable row level security`
+- [x] A delegate JWT cannot select `case_materials` before `release_at` — tested with a raw API call — `02_embargo` reads zero rows as Dana; `my_cases()` nulls title and description in SQL; `signMaterials()` selects on the *caller's* client so the admin key only signs
+- [x] A delegate cannot select internal `feedback_notes`, and the UI leaks no count or gap — `04_documents_feedback`; the empty state is one sentence either way, and `feedback_coverage()` is `where is_exec(auth.uid())` rather than a client-side gate
+- [x] An executive cannot insert into `user_roles` — `02_embargo` expects `insufficient_privilege` and fails loudly if the insert succeeds; the superuser path is asserted alongside it
+- [x] Service role key absent from the client bundle (CI check) — `.github/workflows/ci.yml` greps `dist/client`, `.vercel/output/static` and `dist` for `sb_secret_` and for four server env-var names. See the note below on the exact-value scan.
+- [x] DocuSeal webhook rejects a bad or missing secret — `secretMatches()` is a constant-time compare that also refuses when nothing is configured, and it runs before the body is parsed
+- [x] Submission endpoint rejects a client-supplied timestamp — `submit.ts` judges the window against `row.server_now` from `my_cases()`; no timestamp is read from the request
+- [x] Signed URLs expire in ≤15 minutes — `SIGNED_URL_TTL_SECONDS = 15 * 60` in `lib/server/cases.ts`, and the same value in `api/documents/[id]/pdf.ts`. No other call site signs anything.
+- [x] A user cannot read another user's `cabinet_awards` unless exec or their coach — `03_cabinet_tasks_events` covers self, teammate denied, coach allowed, exec allowed, and the `cabinet_for(other_id)` back door
+- [x] Materials, submissions, and signed-document buckets are private — `public = false` for `case-materials`, `case-submissions`, `signed-documents`. `promo-images` is the one deliberate exception (PHASE_7_NOTES).
+- [n/a] Dietary/allergy data deletion after competition end is implemented if the copy promises it — the condition is unmet: no user-facing string promises deletion, and the brief's §5.10 makes no retention claim. **Retention is therefore undecided rather than satisfied** — see below.
+
+Audited 2026-09-20 against `9b80347`. The first nine are enforced by the CI job
+on every push, not by inspection: run `31921456720` (the Phase 7 merge) ran the
+RLS suite to "All assertions passed" and the bundle grep clean.
+
+**Two things the audit turned up that the boxes do not cover:**
+
+1. The CI secret scan's exact-value branch has never executed. `SUPABASE_SECRET_KEY`
+   is not set as a repository secret, so every run so far has logged
+   "exact-value scan skipped" as a warning and moved on. The `sb_secret_` prefix
+   grep catches any real secret key literal, which is the check that earns its
+   keep; the exact-value pass adds little and would mean storing the production
+   secret in one more place. Left as-is deliberately — the warning is the honest
+   signal, not a gap to paper over.
+
+2. Health data has no expiry. `profiles.allergies`, `dietary_restrictions` and
+   `accessibility_needs` are correctly fenced by RLS (0004) and read only by the
+   delegate, their coach and execs — but they are kept indefinitely. Nothing
+   promised otherwise, so this closes the checklist item honestly; it does not
+   close the question. Worth a decision before a second season accumulates.
 
 ---
 
