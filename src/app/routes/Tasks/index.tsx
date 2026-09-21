@@ -6,7 +6,8 @@ import type { TranslationKey } from '../../i18n';
 import { TASK_GROUPS, canDelete, groupTasks, outstandingCount } from '../../lib/tasks';
 import type { Task, TaskGroup } from '../../lib/tasks';
 import { addTask, deleteTask, setTaskDone, useTasks } from '../../lib/phase3Data';
-import { useSession } from '../../lib/session';
+import Assign from './Assign';
+import { useIsExecLike, useSession } from '../../lib/session';
 import { useServerNow } from '../../lib/serverTime';
 import { formatDayLabel, montrealDayKey, montrealLocalToIso } from '../../lib/time';
 
@@ -27,7 +28,11 @@ const SOURCE_LABEL: Record<Task['source'], TranslationKey> = {
 
 export default function Tasks() {
   const t = useT();
-  const { session } = useSession();
+  const { session, roles } = useSession();
+  const isExecLike = useIsExecLike();
+  // DESIGN_BRIEF §5.4: "Executives/coaches get an assign flow." Same shape as
+  // the feedback screen, which makes the same distinction for the same reason.
+  const canAssign = isExecLike || roles.includes('coach');
   const { now } = useServerNow(60_000);
   const { tasks, loading, reload } = useTasks();
 
@@ -56,8 +61,8 @@ export default function Tasks() {
       </header>
 
       {/* Delegates add their own freely (DESIGN_BRIEF §5.4). Assigning downward
-          is an exec and coach flow and lands with the admin console in Phase 7 —
-          the policy for it is already in migration 0005. */}
+          is the exec and coach flow below, on the policy migration 0005 wrote
+          for it. */}
       <section className="flex flex-col gap-2 rounded-md border border-muted/20 bg-white p-3">
         <label className="flex flex-col gap-1">
           <span className="text-meta font-bold uppercase tracking-widest text-muted">
@@ -88,6 +93,8 @@ export default function Tasks() {
           </button>
         </div>
       </section>
+
+      {canAssign && <Assign onAssigned={reload} />}
 
       {loading && tasks.length === 0 && (
         <div role="status" aria-label={t('nav.tasks')} className="h-24 rounded-md bg-muted/15" />
