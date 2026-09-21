@@ -43,10 +43,35 @@ where c.name_en = 'Jeux du Commerce Central';
 -- authenticated user with no permissions. That is correct: self-service role
 -- assignment is exactly the hole this schema closes.
 --
--- Sign in once through the app, then run this against the database as the
+-- There is a step before that one, and it is easy to miss: on an empty project
+-- you cannot sign in at all. SignInForm passes `shouldCreateUser: false`, so a
+-- magic link is never issued to an address with no account, and the only thing
+-- in the app that creates accounts is the CSV import — which requires an
+-- executive who does not exist yet. The first auth user has to be made from
+-- outside the app, with the secret key:
+--
+--   Supabase dashboard → Authentication → Users → Add user → Create new user.
+--   Tick "Auto Confirm User"; the password field is required by the form and
+--   unused by magic links.
+--
+-- Or the admin API, which is the same thing without the clicking:
+--
+--   curl -X POST "$PUBLIC_SUPABASE_URL/auth/v1/admin/users" \
+--     -H "apikey: $SUPABASE_SECRET_KEY" \
+--     -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+--     -H "Content-Type: application/json" \
+--     -d '{"email":"you@example.com","email_confirm":true,
+--          "user_metadata":{"full_name":"Your Name"}}'
+--
+-- handle_new_user() fires on that insert and creates the profile. Pass
+-- full_name in user_metadata or the profile is named after the email's local
+-- part.
+--
+-- Then sign in through the app, and run this against the database as the
 -- service role (SQL editor in the Supabase dashboard, or psql):
 --
 --   insert into user_roles (user_id, role)
 --   select id, 'superuser' from profiles where email = 'you@example.com';
 --
--- From then on, role grants happen through the admin console in Phase 7.
+-- From then on, role grants happen through the admin console, and everyone
+-- else arrives through the CSV import, which creates accounts properly.
