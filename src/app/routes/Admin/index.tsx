@@ -8,12 +8,14 @@ import Members from './Members';
 import Import from './Import';
 import AuditLog from './AuditLog';
 import Award from './Award';
+import Teams from './Teams';
 
-const TABS = ['members', 'awards', 'import', 'audit'] as const;
+const TABS = ['members', 'teams', 'awards', 'import', 'audit'] as const;
 type Tab = (typeof TABS)[number];
 
 const TAB_LABEL: Record<Tab, TranslationKey> = {
   members: 'admin.members',
+  teams: 'admin.teams',
   awards: 'admin.awards',
   import: 'admin.import',
   audit: 'admin.audit',
@@ -55,6 +57,7 @@ export default function Admin() {
       </div>
 
       {tab === 'members' && <Members isSuperuser={isSuperuser} />}
+      {tab === 'teams' && <Teams />}
       {tab === 'awards' && <Award />}
       {tab === 'import' && <Import />}
       {tab === 'audit' && <AuditLog />}

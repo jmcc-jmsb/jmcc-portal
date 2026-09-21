@@ -321,5 +321,18 @@
   "award.granting": "Granting…",
   "award.granted": "{n} granted.",
   "award.failed": "That grant was refused.",
-  "award.noPieces": "No pieces to grant."
+  "award.noPieces": "No pieces to grant.",
+  "admin.teams": "Teams",
+  "teams.team": "Team",
+  "teams.chooseTeam": "Choose a team",
+  "teams.noTeams": "No teams yet. Teams come from the season seed or the CSV import.",
+  "teams.members": "Members",
+  "teams.coaches": "Coaches",
+  "teams.coachHelp": "Only people who hold a coaching role are listed. A team coach can see their delegates’ dietary and accessibility needs.",
+  "teams.save": "Save roster",
+  "teams.saving": "Saving…",
+  "teams.saved": "Saved: {added} added, {removed} removed.",
+  "teams.unchanged": "Nothing to save.",
+  "teams.failed": "That roster change was refused.",
+  "teams.notCoach": "Someone in the coach list does not hold a coaching role."
 }
