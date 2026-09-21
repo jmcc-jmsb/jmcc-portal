@@ -598,17 +598,45 @@ Authenticated SPA at /app. Signing via self-hosted DocuSeal at sign.jmccjmsb.ca.
 
 ## 12. Environment variables
 
+`.env.example` and the `env` schema in `astro.config.mjs` are authoritative — they
+are what the build reads. This list is a convenience copy, and it had already
+drifted out of step with them once, which is the kind of thing that is only
+discovered mid-deploy. Change all three together.
+
 ```
 PUBLIC_SUPABASE_URL=
-PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=        # server only
+PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=              # server only
 DOCUSEAL_BASE_URL=https://sign.jmccjmsb.ca
 DOCUSEAL_API_TOKEN=               # server only
 DOCUSEAL_WEBHOOK_SECRET=          # server only
 VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=                # server only
+VAPID_SUBJECT=                    # mailto: or https: contact, sent with every push
 PUBLIC_APP_URL=https://portal.jmccjmsb.ca
+PUBLIC_ENABLE_DEV_CONTROLS=false  # the role / vault / cabinet switchers
 ```
+
+`PUBLIC_ENABLE_DEV_CONTROLS` already defaults to `false` in `astro.config.mjs`,
+so the failure mode is not forgetting to set it — it is setting it to `true` on
+the host by pasting a local `.env`. Check the deployed environment for it rather
+than trusting the default.
+
+**The two Supabase names changed.** This section used to say
+`PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY`, which is what an
+older Supabase project calls the same two keys. The current names are above, and
+they are not cosmetic: the CI grep in `.github/workflows/ci.yml` fails a build on
+`sb_secret_` in the client bundle, and the publishable key legitimately starts
+`sb_publishable_`. Under the old JWT-shaped keys both began `eyJ`, so that check
+could not have existed.
+
+`VAPID_PUBLIC_KEY` is public by nature — every subscribing browser receives it —
+but it is kept a server variable so the deployment has one `VAPID_*` convention.
+`/api/push/key` serves it to the client.
+
+Every server variable is declared `context: 'server', access: 'secret'` in
+`astro.config.mjs`, which makes importing one from client code a build error
+rather than a code-review catch.
 
 ---
 
