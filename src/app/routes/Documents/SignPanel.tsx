@@ -60,7 +60,7 @@ export default function SignPanel({
           /* allow-same-origin is required for DocuSeal's own session cookie to
              work inside the frame; without it the signer is anonymous to their
              own document. The `portal.` and `sign.` hosts are same-site under
-             jmccjmsb.ca, which is what keeps Safari's tracking prevention from
+             wecompete.ca, which is what keeps Safari's tracking prevention from
              breaking this — and why HANDOFF §7 says not to test it against a
              *.vercel.app URL, where the cookie conditions differ. */
           sandbox="allow-scripts allow-forms allow-same-origin allow-popups"

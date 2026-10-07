@@ -15,7 +15,7 @@ project could be created against it.
 | Real email addresses | `git grep` over tracked files | None. Fixtures use `@jmcc.test`; the placeholder is `you@live.concordia.ca` |
 | Phone numbers | pattern scan over tracked files | None. Hits were SVG path coordinates in gitignored build output |
 | Credentials in docs | keyword scan of `docs/**.md` | None |
-| Hostnames disclosed | URL extraction over tracked files | `portal.jmccjmsb.ca`, `sign.jmccjmsb.ca` — both already public DNS |
+| Hostnames disclosed | URL extraction over tracked files | `portal.wecompete.ca`, `sign.wecompete.ca` — both already public DNS |
 
 86 tracked files. Nothing found that needs history rewriting.
 
@@ -83,7 +83,7 @@ without a session.
 
 - Every RLS policy and the reasoning behind each one
 - The phase notes, including which checklist items are still open
-- `portal.jmccjmsb.ca` and `sign.jmccjmsb.ca`
+- `portal.wecompete.ca` and `sign.wecompete.ca`
 - The design brief and the prototype export under `docs/prototype/`
 
 None of that is a credential. The phase notes do describe known gaps, which is

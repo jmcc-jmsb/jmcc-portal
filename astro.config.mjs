@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
 // hostname in a component or page. HANDOFF §13: `portal` needs a CNAME to the
 // project-specific value Vercel shows in Settings → Domains, not the generic one.
 export default defineConfig({
-  site: 'https://portal.jmccjmsb.ca',
+  site: 'https://portal.wecompete.ca',
 
   // Server output, deliberately. HANDOFF §2: the portal is a PWA whose shell must
   // open instantly and navigate offline, so /app is one React root with
