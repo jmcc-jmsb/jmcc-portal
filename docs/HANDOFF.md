@@ -106,8 +106,8 @@ Before any application code:
 | UI | **React 19 islands** | Same as the news dashboard |
 | Styling | **Tailwind CSS 4** | Same tokens as the main site |
 | Auth + DB + Storage | **Supabase** | Postgres RLS fits a four-role matrix; realtime and storage included |
-| Signing | **DocuSeal** (existing Railway instance, `sign.jmccjmsb.ca`) | Already deployed |
-| Hosting | **Vercel** at `portal.jmccjmsb.ca` | Same as the news dashboard; cPanel can't run SSR |
+| Signing | **DocuSeal** (existing Railway instance, `sign.wecompete.ca`) | Already deployed |
+| Hosting | **Vercel** at `portal.wecompete.ca` | Same as the news dashboard; cPanel can't run SSR |
 | PWA | **`@vite-pwa/astro`** (Workbox) | Manifest, service worker, caching strategies |
 
 ### Routing decision — read before scaffolding
@@ -457,7 +457,7 @@ The countdown must not depend on the device clock. The prototype uses `Date.now(
 
 ## 7. DocuSeal integration
 
-Existing self-hosted instance at `sign.jmccjmsb.ca` (Railway).
+Existing self-hosted instance at `sign.wecompete.ca` (Railway).
 
 **Assignment** — `POST /api/documents/assign` (exec only): create a DocuSeal submission from a template per recipient, store `docuseal_submission_id` and submitter slug, create the `document_assignments` row and a linked system task.
 
@@ -474,7 +474,7 @@ Webhooks are **at-least-once** — make the handler idempotent.
 
 The API token lives only in `src/lib/server/docuseal.ts`, from env, never in a client bundle.
 
-**Cookie note:** `portal.` and `sign.` are cross-origin but same-site under `jmccjmsb.ca`, which is what keeps Safari's tracking prevention from breaking the embedded iframe. Do not test the embed against a `*.vercel.app` URL — the cookie conditions differ from production and it will pass there and fail on an iPhone.
+**Cookie note:** `portal.` and `sign.` are cross-origin but same-site under `wecompete.ca`, which is what keeps Safari's tracking prevention from breaking the embedded iframe. Do not test the embed against a `*.vercel.app` URL — the cookie conditions differ from production and it will pass there and fail on an iPhone.
 
 ---
 
@@ -575,8 +575,8 @@ RLS suite to "All assertions passed" and the bundle grep clean.
 ```markdown
 # JMCC Delegate Portal
 
-Astro 5 + React 19 islands + Tailwind 4 + Supabase, on Vercel at portal.jmccjmsb.ca.
-Authenticated SPA at /app. Signing via self-hosted DocuSeal at sign.jmccjmsb.ca.
+Astro 5 + React 19 islands + Tailwind 4 + Supabase, on Vercel at portal.wecompete.ca.
+Authenticated SPA at /app. Signing via self-hosted DocuSeal at sign.wecompete.ca.
 
 ## Rules
 - Never put a hex color in a component. Use Tailwind tokens.
@@ -607,13 +607,13 @@ discovered mid-deploy. Change all three together.
 PUBLIC_SUPABASE_URL=
 PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SECRET_KEY=              # server only
-DOCUSEAL_BASE_URL=https://sign.jmccjmsb.ca
+DOCUSEAL_BASE_URL=https://sign.wecompete.ca
 DOCUSEAL_API_TOKEN=               # server only
 DOCUSEAL_WEBHOOK_SECRET=          # server only
 VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=                # server only
 VAPID_SUBJECT=                    # mailto: or https: contact, sent with every push
-PUBLIC_APP_URL=https://portal.jmccjmsb.ca
+PUBLIC_APP_URL=https://portal.wecompete.ca
 PUBLIC_ENABLE_DEV_CONTROLS=false  # the role / vault / cabinet switchers
 ```
 
@@ -642,7 +642,7 @@ rather than a code-review catch.
 
 ## 13. Flags
 
-**DNS lead time — file this now.** `portal.jmccjmsb.ca` needs a CNAME to the project-specific value Vercel shows in Settings → Domains (each project gets its own, e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com`, not the generic `cname.vercel-dns.com` in older guides). Copy it exactly including the trailing period. The record name is `portal`, not the full domain. Given how the DocuSeal TXT record went with CASA, request it before Phase 1 rather than at deploy time.
+**DNS lead time — file this now.** `portal.wecompete.ca` needs a CNAME to the project-specific value Vercel shows in Settings → Domains (each project gets its own, e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com`, not the generic `cname.vercel-dns.com` in older guides). Copy it exactly including the trailing period. The record name is `portal`, not the full domain. Given how the DocuSeal TXT record went with CASA, request it before Phase 1 rather than at deploy time.
 
 **The cabinet list needs exec sign-off, not invention.** The prototype's 26 pieces are credible enough to seed. Bring that list to the exec team as a proposal.
 

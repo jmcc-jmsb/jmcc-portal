@@ -1,7 +1,7 @@
 # JMCC Delegate Portal
 
-Astro 5 + React 19 islands + Tailwind 4 + Supabase, on Vercel at portal.jmccjmsb.ca.
-Authenticated SPA at `/app`. Signing via self-hosted DocuSeal at sign.jmccjmsb.ca.
+Astro 5 + React 19 islands + Tailwind 4 + Supabase, on Vercel at portal.wecompete.ca.
+Authenticated SPA at `/app`. Signing via self-hosted DocuSeal at sign.wecompete.ca.
 
 Read `docs/HANDOFF.md` for architecture and build order, `docs/DESIGN_BRIEF.md`
 for features and copy, `docs/COMPONENT_MAP.md` for what each prototype screen

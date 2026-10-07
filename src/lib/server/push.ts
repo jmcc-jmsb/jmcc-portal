@@ -24,7 +24,7 @@ function configure() {
   webpush.setVapidDetails(
     // A contact the push service can reach if our sending misbehaves. Required
     // by the VAPID spec; a mailto: is the usual form.
-    VAPID_SUBJECT || 'mailto:portal@jmccjmsb.ca',
+    VAPID_SUBJECT || 'mailto:info@wecompete.ca',
     VAPID_PUBLIC_KEY!,
     VAPID_PRIVATE_KEY!,
   );

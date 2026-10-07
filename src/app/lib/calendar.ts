@@ -151,7 +151,7 @@ export function toIcs(event: CalendarEvent, title: string): string {
     'VERSION:2.0',
     'PRODID:-//JMCC//Delegate Portal//EN',
     'BEGIN:VEVENT',
-    `UID:${event.id}@portal.jmccjmsb.ca`,
+    `UID:${event.id}@portal.wecompete.ca`,
     `DTSTAMP:${stamp(new Date(Date.parse(event.starts_at)).toISOString())}`,
     `DTSTART:${stamp(event.starts_at)}`,
     `DTEND:${stamp(end)}`,

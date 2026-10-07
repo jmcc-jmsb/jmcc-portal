@@ -57,7 +57,7 @@ first auth user has to be created from outside the app, with the secret key.
       local part.
 
 - [ ] **Allowlist the callback.** Supabase → Authentication → URL Configuration →
-      Redirect URLs needs `https://portal.jmccjmsb.ca/auth/callback`, and
+      Redirect URLs needs `https://portal.wecompete.ca/auth/callback`, and
       `http://localhost:4321/auth/callback` if you also want to sign in locally.
 
 - [ ] **Sign in through the app.** You will land with **no permissions**. That is
@@ -86,7 +86,7 @@ The two that bite:
 - [ ] `SUPABASE_SECRET_KEY`, not the older `SUPABASE_SERVICE_ROLE_KEY`. The CI
       bundle scan greps for the `sb_secret_` prefix and the publishable key starts
       `sb_publishable_`, which is what makes that check precise.
-- [ ] `PUBLIC_APP_URL=https://portal.jmccjmsb.ca` — the magic-link redirect is
+- [ ] `PUBLIC_APP_URL=https://portal.wecompete.ca` — the magic-link redirect is
       built from it.
 
 ## 5. DocuSeal
@@ -95,7 +95,7 @@ The two that bite:
       refuses when nothing is configured, so an unfilled deploy is closed rather
       than open — the webhook will 401 quietly until you set them.
 - [ ] Point the DocuSeal webhook at
-      `https://portal.jmccjmsb.ca/api/webhooks/docuseal`.
+      `https://portal.wecompete.ca/api/webhooks/docuseal`.
 
 ## 6. Production hygiene
 
@@ -110,9 +110,9 @@ The two that bite:
 - [ ] **A delegate account on a phone cannot reach case materials via a direct
       API call one minute before release, and can one minute after.** `HANDOFF.md`
       calls this Phase 2's real acceptance criterion, not "the vault looks right".
-- [ ] **The DocuSeal embed on a real iPhone, against `portal.jmccjmsb.ca`** —
+- [ ] **The DocuSeal embed on a real iPhone, against `portal.wecompete.ca`** —
       never a `*.vercel.app` preview. `portal.` and `sign.` are cross-origin but
-      same-site under `jmccjmsb.ca`, which is what keeps Safari's tracking
+      same-site under `wecompete.ca`, which is what keeps Safari's tracking
       prevention from breaking the iframe. A preview passes and production fails.
 - [ ] Lighthouse PWA audit against the deployed HTTPS URL.
 
